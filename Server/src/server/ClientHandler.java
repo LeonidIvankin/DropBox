@@ -13,7 +13,7 @@ public class ClientHandler {
 	private ObjectOutputStream out;
 	private String name;
 	private final String SERVER_ROOT = "Server\\src\\files\\";
-	String nick;
+
 	public String getName(){
 		return name;
 	}
@@ -38,12 +38,13 @@ public class ClientHandler {
 								String msg = (String) request;
 								if(msg.startsWith("/auth")){
 									String[] elements  = msg.split(" ");
-									nick = server.getAuthService().getNickByLoginPass(elements[1], elements[2]);
-									System.out.println(nick);
-									if(nick != null){ // если пользователь указал правильные логин/пароль
-										if(!server.isNickBusy(nick)){
-											sendMessage("/authok " + nick);
-											this.name = nick;
+									String name = elements[1];
+									String pass = elements[2];
+									boolean loggedIntoAccount = server.checkLoginAndPass(name, pass);
+									if(loggedIntoAccount){ // если пользователь указал правильные логин/пароль
+										if(!server.isAccountBusy(name)){
+											sendMessage("/authok " + name);
+											this.name = name;
 											sendMessage(this.name + ", ваши файлы");
 											break;
 										}else sendMessage("Учетная запись уже используется");
@@ -59,12 +60,12 @@ public class ClientHandler {
 								if (msg.startsWith("/")) {
 									if (msg.equalsIgnoreCase("/end")) break;
 									else if(msg.equals("/show")){
-										sendObject(getFiles(nick));
+										sendObject(getFiles(name));
 
 
 									} else sendMessage("Такой команды нет!");
 								} else {
-									server.broadcast(this.name + " " + msg);
+									sendMessage(this.name + " " + msg);
 								}
 							}
 						}

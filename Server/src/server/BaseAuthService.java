@@ -22,8 +22,8 @@ public class BaseAuthService implements AuthService{
     }
     public BaseAuthService(){
         entries = new ArrayList<>();
-        entries.add(new Entry("l1", "p1", "n1"));
-        entries.add(new Entry("l2", "p2", "n2"));
+        entries.add(new Entry("l1", "p1", "leo"));
+        entries.add(new Entry("l2", "p2", "alex"));
         entries.add(new Entry("l3", "p3", "n3"));
     }
     @Override

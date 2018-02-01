@@ -29,7 +29,9 @@ public class ClientHandler {
 			e.printStackTrace();
 		}
 
-		new Thread(() -> {
+		server.executorService.submit(new Runnable() {
+			@Override
+			public void run() {
 				try {
 					while(true){
 						while(true){
@@ -38,14 +40,15 @@ public class ClientHandler {
 								String msg = (String) request;
 								if(msg.startsWith("/auth")){
 									String[] elements  = msg.split(" ");
-									String name = elements[1];
+									String name1 = elements[1];
 									String pass = elements[2];
-									boolean loggedIntoAccount = server.checkLoginAndPass(name, pass);
+									System.out.println();
+									boolean loggedIntoAccount = server.checkLoginAndPass(name1, pass);
 									if(loggedIntoAccount){ // если пользователь указал правильные логин/пароль
-										if(!server.isAccountBusy(name)){
-											sendMessage("/authok " + name);
-											this.name = name;
-											sendMessage(this.name + ", ваши файлы");
+										if(!server.isAccountBusy(name1)){
+											sendMessage("/authok " + name1);
+											name = name1;
+											sendMessage(name + ", ваши файлы");
 											break;
 										}else sendMessage("Учетная запись уже используется");
 									}else sendMessage("Не верные логин/пароль");
@@ -65,7 +68,7 @@ public class ClientHandler {
 
 									} else sendMessage("Такой команды нет!");
 								} else {
-									sendMessage(this.name + " " + msg);
+									sendMessage(name + " " + msg);
 								}
 							}
 						}
@@ -73,8 +76,8 @@ public class ClientHandler {
 				} catch (Exception e){
 					e.printStackTrace();
 				}
-		}).start();
-
+			}
+		});
 	}
 
 	public String[] getFiles(String name) {
@@ -99,7 +102,4 @@ public class ClientHandler {
 			e.printStackTrace();
 		}
 	}
-
-
-
 }

@@ -7,17 +7,21 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
 	private final int PORT = 8888;
 	private CopyOnWriteArrayList<ClientHandler> clients;
 	private DBService dbService;
+	public ExecutorService executorService;
 
 
 	public Server(){
 		ServerSocket serverSocket = null;
 		Socket socket = null;
 		clients = new CopyOnWriteArrayList<>();
+		executorService = Executors.newCachedThreadPool();
 
 		try {
 			serverSocket = new ServerSocket(PORT);
@@ -51,7 +55,6 @@ public class Server {
 	}
 
 	public boolean isAccountBusy(String name){
-		System.out.println(name);
 		for(ClientHandler c: clients){
 			if(c.getName().equals(name)) return true;
 		}

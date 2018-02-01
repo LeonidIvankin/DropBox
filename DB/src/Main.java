@@ -32,19 +32,19 @@ public class Main {
 	}
 
 	private static void addData() throws SQLException {
-		statement.executeUpdate("INSERT INTO users (name, pass) VALUES ('Alexandra', '1234')");
+		statement.executeUpdate("INSERT INTO users (name, pass) VALUES ('n1', '1234')");
 	}
 
 	private static void updateData() throws SQLException {
-		statement.executeUpdate("UPDATE users SET pass = 1111 WHERE name = 'Leonid'");
+		statement.executeUpdate("UPDATE users SET pass = 1111 WHERE name = 'n2'");
 	}
 
 	private static void deleteData() throws SQLException {
-		statement.executeUpdate("DELETE FROM users WHERE name = 'Leonid';");
+		statement.executeUpdate("DELETE FROM users WHERE name = 'n2';");
 	}
 
 	private static void getData() throws SQLException {
-		ResultSet resultSet = statement.executeQuery("SELECT id, name FROM users WHERE name = 'Alexandra';");
+		ResultSet resultSet = statement.executeQuery("SELECT id, name FROM users WHERE name = 'n1';");
 		while(resultSet.next()) System.out.println(resultSet.getInt("id") + " " + resultSet.getString("name"));
 	}
 

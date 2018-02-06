@@ -8,57 +8,73 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Client extends JFrame{
 	private final int PORT = 8888;
 	private final String SERVER_IP = "localhost";
-	private JTextArea jTextArea;
+	private JList list;
 	private JTextArea jtaUsers;
-	//private JScrollPane jspUsers;
+	private JScrollPane jScrollPane;
 	private JTextField jTextField;
 	private JTextField jtfLogin;
 	private JPasswordField jtfPassword;
-	private JPanel bottom, top;
+	private JPanel bottomPanel, topPanel, rightPanel;
 	private Socket socket;
+	private JButton jButtonAdd, jButtonDelete, jbAuth;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private boolean isAuthorized;
+	private DefaultListModel defaultListModel;
 
 
 
 	public Client(){
-		setTitle("client.Client");
+		setTitle("Client");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(400, 400);
 		setLocationRelativeTo(null);
-		jTextArea = new JTextArea(); //выводится история
+		setResizable(false);
+		defaultListModel = new DefaultListModel();
+
+		list = new JList(defaultListModel);
+		list.setLayoutOrientation(JList.VERTICAL);
 		jtaUsers = new JTextArea();
 		jtaUsers.setEditable(false);
 		jtaUsers.setPreferredSize(new Dimension(150, 1));
-		jTextArea.setEditable(false);
-		jTextArea.setLineWrap(true);
-		JScrollPane jScrollPane = new JScrollPane(jTextArea);
+		jScrollPane = new JScrollPane(list);
+		jScrollPane.setPreferredSize(new Dimension(200, 200));
+
 		jTextField = new JTextField(); //окно для ввода текста
 		jTextField.setPreferredSize(new Dimension(200, 20));
-		bottom = new JPanel();
-		JButton jButtonSend = new JButton("Send");
-		bottom.add(jTextField, BorderLayout.CENTER);
-		bottom.add(jButtonSend, BorderLayout.EAST);
+		bottomPanel = new JPanel();
+		rightPanel = new JPanel(new GridLayout(3, 1));
+
+
+		jButtonAdd = new JButton("Add");
+		jButtonDelete = new JButton("Delete");
+
+
+		bottomPanel.add(jTextField, BorderLayout.CENTER);
+		rightPanel.add(jButtonAdd);
+		rightPanel.add(jButtonDelete);
+
 		jtfLogin = new JTextField();
 		jtfPassword = new JPasswordField();
-		JButton jbAuth = new JButton("Login");
-		top = new JPanel(new GridLayout(1,3));
-		top.add(jtfLogin);
-		top.add(jtfPassword);
-		top.add(jbAuth);
+		jbAuth = new JButton("Login");
+		topPanel = new JPanel(new GridLayout(1,3));
+		topPanel.add(jtfLogin);
+		topPanel.add(jtfPassword);
+		topPanel.add(jbAuth);
+
+
 
 		add(jScrollPane, BorderLayout.CENTER);
-		add(bottom, BorderLayout.SOUTH);
-		add(top, BorderLayout.NORTH);
+		add(bottomPanel, BorderLayout.SOUTH);
+		add(rightPanel, BorderLayout.EAST);
+		add(topPanel, BorderLayout.NORTH);
 
 		//LISTNERS
-		jButtonSend.addActionListener(new ActionListener() {
+		jButtonAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){
 				sendMessage();
@@ -91,6 +107,8 @@ public class Client extends JFrame{
 		});
 		start();
 		setAuthorized(false);
+
+
 		setVisible(true);
 	}
 
@@ -112,26 +130,20 @@ public class Client extends JFrame{
 							String msg = (String) answer;
 							if(msg.startsWith("/authok")){
 								setAuthorized(true);
-								sendSystemMessage("/show");
 								break;
 							}
-							jTextArea.append(msg + "\n");
-							jTextArea.setCaretPosition(jTextArea.getDocument().getLength());
 						}
 					}
 					while(true){
 						Object answer = in.readObject();
 						if (answer instanceof String){
 							String msg = (String) answer;
-							jTextArea.append(msg + "\n");
-							jTextArea.setCaretPosition(jTextArea.getDocument().getLength()); //перемещает курсор на самый последний символ чата
 						}else if(answer instanceof String[]){
 							String[] files = (String[]) answer;
 							for (String fileName : files) {
 								System.out.println(fileName);
-								jTextArea.append(fileName + "\n");
+								defaultListModel.addElement(fileName);
 							}
-							jTextArea.setCaretPosition(jTextArea.getDocument().getLength());
 						}
 					}
 				}catch(IOException e){
@@ -153,8 +165,9 @@ public class Client extends JFrame{
 
 	public void setAuthorized(boolean authorized){ //скрываем панели для авторизованых и неавторизованых пользователей
 		isAuthorized = authorized;
-		top.setVisible(!isAuthorized);
-		bottom.setVisible(isAuthorized);
+		topPanel.setVisible(!isAuthorized);
+		bottomPanel.setVisible(isAuthorized);
+		rightPanel.setVisible(isAuthorized);
 	}
 
 	public void auth(){

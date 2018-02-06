@@ -48,6 +48,7 @@ public class ClientHandler {
 										if(!server.isAccountBusy(name1)){
 											sendMessage("/authok " + name1);
 											name = name1;
+											sendObject(getFiles(name));
 											sendMessage(name + ", ваши файлы");
 											break;
 										}else sendMessage("Учетная запись уже используется");
@@ -62,11 +63,7 @@ public class ClientHandler {
 								System.out.println("client: " + msg);
 								if (msg.startsWith("/")) {
 									if (msg.equalsIgnoreCase("/end")) break;
-									else if(msg.equals("/show")){
-										sendObject(getFiles(name));
-
-
-									} else sendMessage("Такой команды нет!");
+									else sendMessage("Такой команды нет!");
 								} else {
 									sendMessage(name + " " + msg);
 								}

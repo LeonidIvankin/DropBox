@@ -6,12 +6,11 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class Server {
 	private final int PORT = 8888;
+	private final int MAX_POOL_SIZE = 100;
 	private CopyOnWriteArrayList<ClientHandler> clients;
 	private DBService dbService;
 	public ExecutorService executorService;
@@ -21,7 +20,9 @@ public class Server {
 		ServerSocket serverSocket = null;
 		Socket socket = null;
 		clients = new CopyOnWriteArrayList<>();
-		executorService = Executors.newCachedThreadPool();
+		final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(100);
+		executorService = new ThreadPoolExecutor(MAX_POOL_SIZE, MAX_POOL_SIZE, 0L, TimeUnit.MILLISECONDS, queue);
+		//executorService = Executors.newCachedThreadPool();
 
 		try {
 			serverSocket = new ServerSocket(PORT);

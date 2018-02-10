@@ -1,5 +1,7 @@
 package server;
 
+import common.Constant;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,7 +14,7 @@ public class ClientHandler {
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private String name;
-	private final String SERVER_ROOT = "Server\\src\\files\\";
+	//private final String SERVER_ROOT = "Server\\src\\files\\";
 
 	public String getName(){
 		return name;
@@ -78,7 +80,7 @@ public class ClientHandler {
 	}
 
 	public String[] getFiles(String name) {
-		File folder = new File(SERVER_ROOT + name);
+		File folder = new File(Constant.SERVER_ROOT + name);
 		return folder.list();
 	}
 

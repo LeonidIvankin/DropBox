@@ -1,5 +1,7 @@
 package client;
 
+import common.Constant;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,8 +12,8 @@ import java.io.*;
 import java.net.Socket;
 
 public class Client extends JFrame{
-	private final int PORT = 8888;
-	private final String SERVER_IP = "localhost";
+	//private final int PORT = Constant.PORT;
+	//private final String SERVER_IP = "localhost";
 	private JList list;
 	private JTextArea jtaUsers;
 	private JScrollPane jScrollPane;
@@ -114,7 +116,7 @@ public class Client extends JFrame{
 
 	public void start(){
 		try{
-			socket = new Socket(SERVER_IP, PORT);
+			socket = new Socket(Constant.SERVER_IP, Constant.PORT);
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
 		}catch(IOException e){

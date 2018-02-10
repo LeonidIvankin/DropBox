@@ -1,5 +1,6 @@
 package server;
 
+import common.Constant;
 import db.DBService;
 
 import java.io.*;
@@ -9,8 +10,7 @@ import java.sql.SQLException;
 import java.util.concurrent.*;
 
 public class Server {
-	private final int PORT = 8888;
-	private final int MAX_POOL_SIZE = 100;
+	//private final int MAX_POOL_SIZE = 100;
 	private CopyOnWriteArrayList<ClientHandler> clients;
 	private DBService dbService;
 	public ExecutorService executorService;
@@ -21,11 +21,10 @@ public class Server {
 		Socket socket = null;
 		clients = new CopyOnWriteArrayList<>();
 		final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(100);
-		executorService = new ThreadPoolExecutor(MAX_POOL_SIZE, MAX_POOL_SIZE, 0L, TimeUnit.MILLISECONDS, queue);
-		//executorService = Executors.newCachedThreadPool();
+		executorService = new ThreadPoolExecutor(Constant.MAX_NUMBER_CLIENTS, Constant.MAX_NUMBER_CLIENTS, 0L, TimeUnit.MILLISECONDS, queue);
 
 		try {
-			serverSocket = new ServerSocket(PORT);
+			serverSocket = new ServerSocket(Constant.PORT);
 
 			dbService = new DBService();
 			dbService.connect();

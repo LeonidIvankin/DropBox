@@ -5,4 +5,8 @@ public interface Constant {
 	int MAX_NUMBER_CLIENTS = 100;
 	String SERVER_IP = "localhost";
 	String SERVER_ROOT = "Server\\src\\files\\";
+
+	//System command
+	String DOWNLOAD = "/download";
+	String END = "/end";
 }

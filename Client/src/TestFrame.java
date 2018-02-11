@@ -1,71 +1,65 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class TestFrame extends JFrame {
 
 	public TestFrame() {
-		String[] data = { "Chrome", "Firefox", "Internet Explorer", "Safari",
-				"Opera", "Morrowind", "Oblivion", "NFS", "Half Life 2",
-				"Hitman", "Morrowind", "Oblivion", "NFS", "Half Life 2",
-				"Hitman", "Morrowind", "Oblivion", "NFS", "Half Life 2",
-				"Hitman", "Morrowind", "Oblivion", "NFS", "Half Life 2",
-				"Hitman", "Morrowind", "Oblivion", "NFS", "Half Life 2",
-				"Hitman", "IL-2", "CMR", "NFS Undercover",
-				"Star Wars", "Call of Duty", "IL-2", "CMR",
-				"NFS Undercover", "Star Wars"
-		};
-
-		setTitle("Client");
+		super("Тестовое окно");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(400, 400);
-		setLocationRelativeTo(null);
-		setResizable(false);
 
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-		DefaultListModel dlm = new DefaultListModel();
-		//for (String str : data) {
-			dlm.addElement("1111");
-			dlm.addElement("1111");
-		//}
+		panel.add(Box.createVerticalGlue());
 
-		JList list = new JList(dlm);
-		list.setLayoutOrientation(JList.VERTICAL);
-		JScrollPane northScroll = new JScrollPane(list);
-		mainPanel.add(northScroll);
+		final JLabel label = new JLabel("Выбранный файл");
+		label.setAlignmentX(CENTER_ALIGNMENT);
+		panel.add(label);
 
-		JTextField jTextField = new JTextField();
-		mainPanel.add(jTextField);
+		panel.add(Box.createRigidArea(new Dimension(10, 10)));
 
-		JButton jButton1 = new JButton("Add");
-		mainPanel.add(jButton1);
-		jButton1.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				dlm.addElement(jTextField.getText());
-			}
-		});
+		JButton button = new JButton("Показать JFileChooser");
+		button.setAlignmentX(CENTER_ALIGNMENT);
 
-		JButton jButton2 = new JButton("Remove");
-		mainPanel.add(jButton2);
-		jButton2.addActionListener(new ActionListener() {
-			@Override
+		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dlm.removeElement(list.getSelectedValue());
+				JFileChooser fileopen = new JFileChooser();
+				int ret = fileopen.showDialog(null, "Открыть файл");
+				if (ret == JFileChooser.APPROVE_OPTION) {
+					File file = fileopen.getSelectedFile();
+					label.setText(file.getName());
+				}
 			}
 		});
 
+		panel.add(button);
+		panel.add(Box.createVerticalGlue());
+		getContentPane().add(panel);
 
-
-		getContentPane().add(mainPanel);
+		setPreferredSize(new Dimension(260, 220));
+		pack();
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
 	public static void main(String[] args) {
-		new TestFrame();
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				JFrame.setDefaultLookAndFeelDecorated(true);
+				JDialog.setDefaultLookAndFeelDecorated(true);
+				new TestFrame();
+			}
+		});
 	}
 }

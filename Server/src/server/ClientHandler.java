@@ -64,11 +64,16 @@ public class ClientHandler {
 								String msg = (String) request;
 								System.out.println("client: " + msg);
 								if (msg.startsWith("/")) {
-									if (msg.equalsIgnoreCase("/end")) break;
+									if (msg.equalsIgnoreCase(Constant.END)) break;
 									else sendMessage("Такой команды нет!");
 								} else {
 									sendMessage(name + " " + msg);
 								}
+							} else if(request instanceof String[]){
+								String[] msg = (String[]) request;
+								if(msg[0] == Constant.DOWNLOAD){
+									//sendObject(Constant.SERVER_ROOT + "\\"+ msg[1]);
+								}else sendMessage("Такой команды нет!");
 							}
 						}
 					}
@@ -84,7 +89,7 @@ public class ClientHandler {
 		return folder.list();
 	}
 
-	public void sendObject(Object obj){
+	public void sendObject(Object ... obj){
 		try{
 			out.writeObject(obj);
 			out.flush();

@@ -22,7 +22,7 @@ public class Client extends JFrame{
 	private JPasswordField jtfPassword;
 	private JPanel bottomPanel, topPanel, rightPanel;
 	private Socket socket;
-	private JButton jButtonAdd, jButtonDelete, jbAuth;
+	private JButton jButtonAdd, jButtonDelete, jbAuth, upload, download;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private boolean isAuthorized;
@@ -49,16 +49,20 @@ public class Client extends JFrame{
 		jTextField = new JTextField(); //окно для ввода текста
 		jTextField.setPreferredSize(new Dimension(200, 20));
 		bottomPanel = new JPanel();
-		rightPanel = new JPanel(new GridLayout(3, 1));
+		rightPanel = new JPanel(new GridLayout(4, 1));
 
 
 		jButtonAdd = new JButton("Add");
 		jButtonDelete = new JButton("Delete");
+		upload = new JButton("Upload");
+		download = new JButton("Download");
 
 
 		bottomPanel.add(jTextField, BorderLayout.CENTER);
 		rightPanel.add(jButtonAdd);
 		rightPanel.add(jButtonDelete);
+		rightPanel.add(upload);
+		rightPanel.add(download);
 
 		jtfLogin = new JTextField();
 		jtfPassword = new JPasswordField();
@@ -75,7 +79,7 @@ public class Client extends JFrame{
 		add(rightPanel, BorderLayout.EAST);
 		add(topPanel, BorderLayout.NORTH);
 
-		//LISTNERS
+/*		//LISTNERS
 		jButtonAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){
@@ -87,7 +91,7 @@ public class Client extends JFrame{
 			public void actionPerformed(ActionEvent e){
 				sendMessage();
 			}
-		});
+		});*/
 		jbAuth.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){
@@ -99,14 +103,40 @@ public class Client extends JFrame{
 			public void windowClosing(WindowEvent e){
 				super.windowClosing(e);
 				try{
-					out.writeObject("/end");
+					out.writeObject(Constant.END);
 					socket.close();
 				}catch(IOException e1){
 					e1.printStackTrace();
-					setAuthorized(false);
+
+						setAuthorized(false);
 				}
 			}
 		});
+
+		upload.addActionListener(e -> {
+			JFileChooser fs = new JFileChooser(new File("Server\\src\\files\\"));
+			fs.setDialogTitle("Open a File");
+			fs.setFileFilter(new FileTypeFilter(".txt", "TextFile"));
+			fs.setFileFilter(new FileTypeFilter(".docx", "WordFile"));
+			fs.setFileFilter(new FileTypeFilter(".jpg", "JPEG File"));
+			int result = fs.showOpenDialog(null);
+			if(result == JFileChooser.APPROVE_OPTION){
+				defaultListModel.addElement(fs.getName());
+
+			}
+		});
+
+		download.addActionListener(e -> {
+			JFileChooser fs = new JFileChooser(new File("c:\\Users\\ILM\\Desktop\\"));
+			fs.setDialogTitle("Save a File");
+			//fs.setFileFilter(new FileTypeFilter(".txt", "TextFile"));
+			int result = fs.showSaveDialog(null);
+			if(result == JFileChooser.APPROVE_OPTION){
+				sendSystemMessageArray(Constant.DOWNLOAD, fs.getName());
+				//System.out.println(Constant.DOWNLOAD + " " + list.getSelectedValue());
+			}
+		});
+
 		start();
 		setAuthorized(false);
 
@@ -140,6 +170,7 @@ public class Client extends JFrame{
 						Object answer = in.readObject();
 						if (answer instanceof String){
 							String msg = (String) answer;
+							JOptionPane.showMessageDialog(null, msg);
 						}else if(answer instanceof String[]){
 							String[] files = (String[]) answer;
 							for (String fileName : files) {
@@ -184,6 +215,16 @@ public class Client extends JFrame{
 	}
 
 	public void sendSystemMessage(String msg){
+		try{
+			out.writeObject(msg);
+			out.flush();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+
+	public void sendSystemMessageArray(String head, String body){
+		String[] msg = {head, body};
 		try{
 			out.writeObject(msg);
 			out.flush();

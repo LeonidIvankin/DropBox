@@ -2,10 +2,7 @@ package server;
 
 import common.Constant;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class ClientHandler {
@@ -14,7 +11,8 @@ public class ClientHandler {
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private String name;
-	//private final String SERVER_ROOT = "Server\\src\\files\\";
+	private File filePath;
+	private byte[] barr;
 
 	public String getName(){
 		return name;
@@ -50,7 +48,7 @@ public class ClientHandler {
 										if(!server.isAccountBusy(name1)){
 											sendMessage("/authok " + name1);
 											name = name1;
-											sendObject(getFiles(name));
+											sendObject(Constant.FILE_LIST, getFiles(name));
 											sendMessage(name + ", ваши файлы");
 											break;
 										}else sendMessage("Учетная запись уже используется");
@@ -71,8 +69,15 @@ public class ClientHandler {
 								}
 							} else if(request instanceof String[]){
 								String[] msg = (String[]) request;
-								if(msg[0] == Constant.DOWNLOAD){
-									//sendObject(Constant.SERVER_ROOT + "\\"+ msg[1]);
+								if(msg[0].equals(Constant.DOWNLOAD)){
+									filePath = new File(Constant.SERVER_ROOT + name + "\\" + msg[1]);//откуда файл скачать с сервера
+									try (InputStream in = new BufferedInputStream(new FileInputStream(filePath), Constant.BUFFER_SIZE)){
+										barr = new byte[Constant.BUFFER_SIZE];
+										in.read(barr);
+										sendObject(Constant.DOWNLOAD, barr);
+									}catch (Exception e1){
+										e1.printStackTrace();
+									}
 								}else sendMessage("Такой команды нет!");
 							}
 						}

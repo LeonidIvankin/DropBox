@@ -12,8 +12,7 @@ import java.io.*;
 import java.net.Socket;
 
 public class Client extends JFrame{
-	//private final int PORT = Constant.PORT;
-	//private final String SERVER_IP = "localhost";
+	//private finag SERVER_IP = "localhost";
 	private JList list;
 	private JTextArea jtaUsers;
 	private JScrollPane jScrollPane;
@@ -27,6 +26,8 @@ public class Client extends JFrame{
 	private ObjectOutputStream out;
 	private boolean isAuthorized;
 	private DefaultListModel defaultListModel;
+	private File filePath;
+	private byte[] barr;
 
 
 
@@ -79,19 +80,6 @@ public class Client extends JFrame{
 		add(rightPanel, BorderLayout.EAST);
 		add(topPanel, BorderLayout.NORTH);
 
-/*		//LISTNERS
-		jButtonAdd.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				sendMessage();
-			}
-		});
-		jTextField.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				sendMessage();
-			}
-		});*/
 		jbAuth.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){
@@ -129,11 +117,14 @@ public class Client extends JFrame{
 		download.addActionListener(e -> {
 			JFileChooser fs = new JFileChooser(new File("c:\\Users\\ILM\\Desktop\\"));
 			fs.setDialogTitle("Save a File");
-			//fs.setFileFilter(new FileTypeFilter(".txt", "TextFile"));
+			//fs.setFileFilter(new server.FileTypeFilter(".txt", "TextFile"));
 			int result = fs.showSaveDialog(null);
 			if(result == JFileChooser.APPROVE_OPTION){
-				sendSystemMessageArray(Constant.DOWNLOAD, fs.getName());
-				//System.out.println(Constant.DOWNLOAD + " " + list.getSelectedValue());
+				filePath = fs.getSelectedFile();//куда сохранять файл
+				sendSystemMessageArray(Constant.DOWNLOAD, list.getSelectedValue().toString());//какой файл выбрали в списке
+				System.out.println(Constant.DOWNLOAD + " " + list.getSelectedValue());
+				System.out.println(filePath);
+
 			}
 		});
 
@@ -171,11 +162,21 @@ public class Client extends JFrame{
 						if (answer instanceof String){
 							String msg = (String) answer;
 							JOptionPane.showMessageDialog(null, msg);
-						}else if(answer instanceof String[]){
-							String[] files = (String[]) answer;
-							for (String fileName : files) {
-								System.out.println(fileName);
-								defaultListModel.addElement(fileName);
+						}else if(answer instanceof Object[]){
+							Object[] objects = (Object[]) answer;
+							String head = (String) objects[0];
+							if(head.equals(Constant.FILE_LIST)) {
+								String[] body = (String[]) objects[1];
+								for (String fileName : body) {
+									defaultListModel.addElement(fileName);
+								}
+							}else if(head.equals(Constant.DOWNLOAD)){
+								barr = (byte[]) objects[1];
+								try (OutputStream out = new BufferedOutputStream(new FileOutputStream(filePath), Constant.BUFFER_SIZE)){
+									out.write(barr);
+								}catch (Exception e1){
+									e1.printStackTrace();
+								}
 							}
 						}
 					}

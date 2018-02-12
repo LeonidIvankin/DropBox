@@ -109,13 +109,13 @@ public class Client extends JFrame{
 			fs.setFileFilter(new FileTypeFilter(".jpg", "JPEG File"));
 			int result = fs.showOpenDialog(null);
 			if(result == JFileChooser.APPROVE_OPTION){
-				defaultListModel.addElement(fs.getName());
+				//пусто
 
 			}
 		});
 
 		download.addActionListener(e -> {
-			JFileChooser fs = new JFileChooser(new File("c:\\Users\\ILM\\Desktop\\"));
+			JFileChooser fs = new JFileChooser(new File("c:\\"));
 			fs.setDialogTitle("Save a File");
 			//fs.setFileFilter(new server.FileTypeFilter(".txt", "TextFile"));
 			int result = fs.showSaveDialog(null);

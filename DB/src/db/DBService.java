@@ -50,9 +50,10 @@ public class DBService {
 
 	public boolean getData(String name, String pass){
 		try {
-			ResultSet resultSet = statement.executeQuery("SELECT id, name, pass, nick FROM users WHERE name = '" + name + "' AND pass = '" + pass + "';");
-			return true;
+			ResultSet resultSet = statement.executeQuery("SELECT pass FROM users WHERE name = '" + name + "' AND pass = '" + pass + "';");
+			return resultSet.getString("pass").equals(pass);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

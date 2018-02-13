@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.concurrent.*;
 
 public class Server {
-	//private final int MAX_POOL_SIZE = 100;
 	private CopyOnWriteArrayList<ClientHandler> clients;
 	private DBService dbService;
 	public ExecutorService executorService;

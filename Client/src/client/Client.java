@@ -12,7 +12,6 @@ import java.io.*;
 import java.net.Socket;
 
 public class Client extends JFrame{
-	//private finag SERVER_IP = "localhost";
 	private JList list;
 	private JTextArea jtaUsers;
 	private JScrollPane jScrollPane;
@@ -21,10 +20,10 @@ public class Client extends JFrame{
 	private JPasswordField jtfPassword;
 	private JPanel bottomPanel, topPanel, rightPanel;
 	private Socket socket;
-	private JButton jButtonAdd, jButtonDelete, jbAuth, upload, download;
+	private JButton jButtonAdd, jButtonDelete, jbAuth, upload, download, exit;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
-	private boolean isAuthorized;
+	private boolean isAuthorized = false;
 	private DefaultListModel defaultListModel;
 	private File filePath;
 	private byte[] barr;
@@ -50,13 +49,14 @@ public class Client extends JFrame{
 		jTextField = new JTextField(); //окно для ввода текста
 		jTextField.setPreferredSize(new Dimension(200, 20));
 		bottomPanel = new JPanel();
-		rightPanel = new JPanel(new GridLayout(4, 1));
+		rightPanel = new JPanel(new GridLayout(5, 1));
 
 
 		jButtonAdd = new JButton("Add");
 		jButtonDelete = new JButton("Delete");
 		upload = new JButton("Upload");
-		download = new JButton("Download");
+		buttonDownload();
+		exit = new JButton("Exit");
 
 
 		bottomPanel.add(jTextField, BorderLayout.CENTER);
@@ -80,12 +80,8 @@ public class Client extends JFrame{
 		add(rightPanel, BorderLayout.EAST);
 		add(topPanel, BorderLayout.NORTH);
 
-		jbAuth.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				auth();
-			}
-		});
+		jbAuth.addActionListener(e -> auth());
+
 		addWindowListener(new WindowAdapter() { //отвечает за закрытие соединения при закрытии окна через крестик
 			@Override
 			public void windowClosing(WindowEvent e){
@@ -114,25 +110,27 @@ public class Client extends JFrame{
 			}
 		});
 
+
+
+		start();
+		setAuthorized(false);
+		setVisible(true);
+	}
+	
+	public void buttonDownload(){
+		download = new JButton("Download");
 		download.addActionListener(e -> {
 			JFileChooser fs = new JFileChooser(new File("c:\\"));
 			fs.setDialogTitle("Save a File");
-			//fs.setFileFilter(new server.FileTypeFilter(".txt", "TextFile"));
 			int result = fs.showSaveDialog(null);
 			if(result == JFileChooser.APPROVE_OPTION){
 				filePath = fs.getSelectedFile();//куда сохранять файл
-				sendSystemMessageArray(Constant.DOWNLOAD, list.getSelectedValue().toString());//какой файл выбрали в списке
+				sendPacket(Constant.DOWNLOAD, list.getSelectedValue().toString());//какой файл выбрали в списке
 				System.out.println(Constant.DOWNLOAD + " " + list.getSelectedValue());
 				System.out.println(filePath);
 
 			}
 		});
-
-		start();
-		setAuthorized(false);
-
-
-		setVisible(true);
 	}
 
 	public void start(){
@@ -143,54 +141,22 @@ public class Client extends JFrame{
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		Thread thread1 = new Thread(new Runnable() {
-			@Override
-			public void run(){
+		Thread thread1 = new Thread(() -> {
+			try{
+				while(true){
+					takePacket(in.readObject());
+				}
+
+			}catch(IOException e){
+				e.printStackTrace();
+				setAuthorized(false);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}finally{
 				try{
-					while(true){
-						Object answer = in.readObject();
-						if (answer instanceof String){
-							String msg = (String) answer;
-							if(msg.startsWith("/authok")){
-								setAuthorized(true);
-								break;
-							}
-						}
-					}
-					while(true){
-						Object answer = in.readObject();
-						if (answer instanceof String){
-							String msg = (String) answer;
-							JOptionPane.showMessageDialog(null, msg);
-						}else if(answer instanceof Object[]){
-							Object[] objects = (Object[]) answer;
-							String head = (String) objects[0];
-							if(head.equals(Constant.FILE_LIST)) {
-								String[] body = (String[]) objects[1];
-								for (String fileName : body) {
-									defaultListModel.addElement(fileName);
-								}
-							}else if(head.equals(Constant.DOWNLOAD)){
-								barr = (byte[]) objects[1];
-								try (OutputStream out = new BufferedOutputStream(new FileOutputStream(filePath), Constant.BUFFER_SIZE)){
-									out.write(barr);
-								}catch (Exception e1){
-									e1.printStackTrace();
-								}
-							}
-						}
-					}
+					socket.close();
 				}catch(IOException e){
 					e.printStackTrace();
-					setAuthorized(false);
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}finally{
-					try{
-						socket.close();
-					}catch(IOException e){
-						e.printStackTrace();
-					}
 				}
 			}
 		});
@@ -206,42 +172,67 @@ public class Client extends JFrame{
 
 	public void auth(){
 		if(socket == null || socket.isClosed()) start();
-		try{
-			out.writeObject("/auth " + jtfLogin.getText() + " " + jtfPassword.getText());
-			jtfLogin.setText("");
-			jtfPassword.setText("");
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+		Object[] objects = {jtfLogin.getText(), jtfPassword.getText()};
+		sendPacket(Constant.AUTH, objects);
+		jtfLogin.setText("");
+		jtfPassword.setText("");
 	}
 
-	public void sendSystemMessage(String msg){
+	public void sendPacket(String head, Object body){//принять заголовок, тело и отправить на сервер
+		Object[] packet = {head, body};
 		try{
-			out.writeObject(msg);
+			out.writeObject(packet);
 			out.flush();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
 	}
 
-	public void sendSystemMessageArray(String head, String body){
-		String[] msg = {head, body};
-		try{
-			out.writeObject(msg);
-			out.flush();
-		}catch(IOException e){
-			e.printStackTrace();
+	public void takePacket(Object answer){//принять сообщение в виде массива Object
+		if(answer instanceof Object[]){
+			Object[] packet = (Object[]) answer;
+			String head = (String) packet[0];
+			Object body = packet[1];
+			checkHead(head, body);
+		}
+
+	}
+
+	public void checkHead(String head, Object body){//в зависимости от head, сделать с body
+		switch (head){
+			case Constant.AUTHOK:
+				setAuthorized(true);
+				break;
+			case Constant.TEXT_MESSAGE:
+				showMessageDialog((String)body);
+				break;
+			case Constant.FILE_LIST:
+				showFileList(body);
+				break;
+			case Constant.DOWNLOAD:
+				downloadFile(body);
+				break;
 		}
 	}
 
-	public void sendMessage(){
-		String msg = jTextField.getText();
-		jTextField.setText("");
-		try{
-			out.writeObject(msg);
-			out.flush();
-		}catch(IOException e){
-			e.printStackTrace();
+	private void showFileList(Object body) {
+		String[] fileList = (String[]) body;
+		for (String fileName : fileList) {
+			defaultListModel.addElement(fileName);
 		}
 	}
+
+	public void showMessageDialog(String msg){//показать у клиента диалоговое окно с сообщением
+		JOptionPane.showMessageDialog(null, msg);
+	}
+
+	public void downloadFile(Object body){
+		barr = (byte[]) body;
+		try (OutputStream out = new BufferedOutputStream(new FileOutputStream(filePath), Constant.BUFFER_SIZE)){
+			out.write(barr);
+		}catch (Exception e1){
+			e1.printStackTrace();
+		}
+	}
+
 }

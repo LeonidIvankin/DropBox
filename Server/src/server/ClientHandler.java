@@ -87,8 +87,6 @@ public class ClientHandler {
 		}
 	}
 
-
-
 	public void authorization(Object body){//проверка логина и пароля
 		Object[] objects = (Object[]) body;
 		String name = (String) objects[0];

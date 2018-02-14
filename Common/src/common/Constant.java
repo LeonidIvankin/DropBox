@@ -16,4 +16,5 @@ public interface Constant {
 	String AUTH = "/auth";
 	String AUTHOK = "/authok";
 	String TEXT_MESSAGE = "/textMessage";
+	String RELOAD = "/reload";
 }

@@ -78,8 +78,16 @@ public class ClientHandler {
 			case Constant.DOWNLOAD:
 				downloadFile(body);
 				break;
+			case Constant.UPLOAD:
+				uploadFile(body);
+				break;
+			case Constant.RELOAD:
+				sendPacket(Constant.FILE_LIST, getFiles(this.name));
+				break;
 		}
 	}
+
+
 
 	public void authorization(Object body){//проверка логина и пароля
 		Object[] objects = (Object[]) body;
@@ -109,5 +117,20 @@ public class ClientHandler {
 		}catch (Exception e1){
 			e1.printStackTrace();
 		}
+	}
+
+	private void uploadFile(Object body) {
+		Object[] uploadFile = (Object[]) body;
+		String fileName = (String) uploadFile[0];
+		System.out.println(fileName);
+		barr = (byte[]) uploadFile[1];
+		filePath = new File(Constant.SERVER_ROOT + name + "\\" + fileName);
+
+		try (OutputStream out = new BufferedOutputStream(new FileOutputStream(filePath), Constant.BUFFER_SIZE)){
+			out.write(barr);
+		}catch (Exception e1){
+			e1.printStackTrace();
+		}
+		sendPacket(Constant.FILE_LIST, getFiles(this.name));
 	}
 }

@@ -8,11 +8,13 @@ public class Client extends JFrame{
 	private JTextArea jtaUsers;
 	private JScrollPane jScrollPane;
 	private JTextField jTextField;
+
 	protected JTextField jtfLogin;
 	protected JPasswordField jtfPassword;
 	protected JPanel bottomPanel, topPanel, rightPanel;
 	protected JButton jButtonAdd, jButtonDelete, jbAuth, jbUpload, jbDownload, jbExit, jbReload;
 	protected DefaultListModel defaultListModel;
+
 	private Control control;
 
 

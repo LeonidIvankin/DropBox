@@ -12,7 +12,7 @@ public class Client extends JFrame{
 	protected JTextField jtfLogin;
 	protected JPasswordField jtfPassword;
 	protected JPanel bottomPanel, topPanel, rightPanel;
-	protected JButton jButtonAdd, jButtonDelete, jbAuth, jbUpload, jbDownload, jbExit, jbReload;
+	protected JButton jButtonAdd, jButtonDelete, jbSignIn, jbSignUp, jbUpload, jbDownload, jbExit, jbReload;
 	protected DefaultListModel defaultListModel;
 
 	private Control control;
@@ -20,7 +20,7 @@ public class Client extends JFrame{
 
 
 	public Client(){
-		setTitle("Client");
+		setTitle("DropBox");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(400, 400);
 		setLocationRelativeTo(null);
@@ -46,6 +46,8 @@ public class Client extends JFrame{
 		jbDownload = new JButton("Download");
 		jbExit = new JButton("Exit");
 		jbReload = new JButton("Reload");
+		jbSignIn = new JButton("SignIn");
+		jbSignUp = new JButton("SignUp");
 
 		bottomPanel.add(jTextField, BorderLayout.CENTER);
 		rightPanel.add(jButtonAdd);
@@ -56,11 +58,12 @@ public class Client extends JFrame{
 
 		jtfLogin = new JTextField();
 		jtfPassword = new JPasswordField();
-		jbAuth = new JButton("Login");
+
 		topPanel = new JPanel(new GridLayout(1,3));
 		topPanel.add(jtfLogin);
 		topPanel.add(jtfPassword);
-		topPanel.add(jbAuth);
+		topPanel.add(jbSignIn);
+		topPanel.add(jbSignUp);
 
 		add(jScrollPane, BorderLayout.CENTER);
 		add(bottomPanel, BorderLayout.SOUTH);

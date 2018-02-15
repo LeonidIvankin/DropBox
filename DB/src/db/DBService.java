@@ -19,7 +19,7 @@ public class DBService {
 			//addData();
 			//updateData();
 			//deleteData();
-			getData();
+			checkLoginAndPass();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -33,27 +33,46 @@ public class DBService {
 		statement.executeUpdate("INSERT INTO users (name, pass) VALUES ('leo', '1234')");
 	}
 
-	private void updateData() throws SQLException {
-		statement.executeUpdate("UPDATE users SET pass = 1111 WHERE name = 'alex'");
+	public boolean addData(String name, String pass){
+
+		try {
+			statement.executeUpdate("INSERT INTO users (name, pass) VALUES ('" + name + "', '" + pass + "')");
+			return true;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			return false;
+		}
 	}
+
+
 
 	private void deleteData() throws SQLException {
 		statement.executeUpdate("DELETE FROM users WHERE name = 'alex';");
 	}
 
-	private void getData() throws SQLException {
+	private void checkLoginAndPass() throws SQLException {
 		ResultSet resultSet = statement.executeQuery("SELECT id, name FROM users WHERE name = 'leo';");
 		while(resultSet.next()) {
 			System.out.println(resultSet.getInt("id") + " " + resultSet.getString("name"));
 		}
 	}
 
-	public boolean getData(String name, String pass){
+	public boolean checkLoginAndPass(String name, String pass){
 		try {
 			ResultSet resultSet = statement.executeQuery("SELECT pass FROM users WHERE name = '" + name + "' AND pass = '" + pass + "';");
 			return resultSet.getString("pass").equals(pass);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean checkLogin(String name){
+		try {
+			ResultSet resultSet = statement.executeQuery("SELECT pass FROM users WHERE name = '" + name + "';");
+			return resultSet.getString("pass") != null;
+		} catch (SQLException e) {
+			//e.printStackTrace();
 			return false;
 		}
 	}

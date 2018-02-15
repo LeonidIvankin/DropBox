@@ -61,7 +61,15 @@ public class Server {
 	}
 
 	public boolean checkLoginAndPass(String name, String pass){
-		return dbService.getData(name, pass);
+		return dbService.checkLoginAndPass(name, pass);
+	}
+
+	public boolean checkLogin(String name){
+		return dbService.checkLogin(name);
+	}
+
+	public boolean setLoginAndPass(String name, String pass){
+		return dbService.addData(name, pass);
 	}
 
 

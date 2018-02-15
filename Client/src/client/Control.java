@@ -37,7 +37,8 @@ class Control{
 			}
 		});
 
-		listenerAuth();
+		listenerSignIn();
+		listenerSignUp();
 		listenerDownload();
 		listenerUpload();
 		listenerReload();
@@ -89,9 +90,28 @@ class Control{
 		});
 	}
 
-	public void listenerAuth(){
-		client.jbAuth.addActionListener(e -> auth());
+	public void listenerSignIn(){
+		client.jbSignIn.addActionListener(e -> {
+			if(socket == null || socket.isClosed()) start();
+			Object[] objects = {client.jtfLogin.getText(), client.jtfPassword.getText()};
+			sendPacket(Constant.AUTH, objects);
+			client.jtfLogin.setText("");
+			client.jtfPassword.setText("");
+		});
 	}
+
+
+	public void listenerSignUp(){
+		client.jbSignUp.addActionListener(e -> {
+			if(socket == null || socket.isClosed()) start();
+			Object[] objects = {client.jtfLogin.getText(), client.jtfPassword.getText()};
+			sendPacket(Constant.SIGNUP, objects);
+			client.jtfLogin.setText("");
+			client.jtfPassword.setText("");
+		});
+	}
+
+
 
 	public void start(){
 		try{
@@ -128,14 +148,6 @@ class Control{
 		client.topPanel.setVisible(!isAuthorized);
 		client.bottomPanel.setVisible(isAuthorized);
 		client.rightPanel.setVisible(isAuthorized);
-	}
-
-	public void auth(){
-		if(socket == null || socket.isClosed()) start();
-		Object[] objects = {client.jtfLogin.getText(), client.jtfPassword.getText()};
-		sendPacket(Constant.AUTH, objects);
-		client.jtfLogin.setText("");
-		client.jtfPassword.setText("");
 	}
 
 	public void sendPacket(String head, Object body){//принять заголовок, тело и отправить на сервер

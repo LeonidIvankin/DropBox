@@ -146,7 +146,6 @@ class Control{
 	public void setAuthorized(boolean authorized){ //скрываем панели для авторизованых и неавторизованых пользователей
 		isAuthorized = authorized;
 		client.topPanel.setVisible(!isAuthorized);
-		client.bottomPanel.setVisible(isAuthorized);
 		client.rightPanel.setVisible(isAuthorized);
 	}
 

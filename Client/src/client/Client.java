@@ -7,11 +7,10 @@ public class Client extends JFrame{
 	protected JList list;
 	private JTextArea jtaUsers;
 	private JScrollPane jScrollPane;
-	private JTextField jTextField;
 
 	protected JTextField jtfLogin;
 	protected JPasswordField jtfPassword;
-	protected JPanel bottomPanel, topPanel, rightPanel;
+	protected JPanel topPanel, rightPanel;
 	protected JButton jButtonAdd, jButtonDelete, jbSignIn, jbSignUp, jbUpload, jbDownload, jbExit, jbReload;
 	protected DefaultListModel defaultListModel;
 
@@ -35,9 +34,6 @@ public class Client extends JFrame{
 		jScrollPane = new JScrollPane(list);
 		jScrollPane.setPreferredSize(new Dimension(200, 200));
 
-		jTextField = new JTextField(); //окно для ввода текста
-		jTextField.setPreferredSize(new Dimension(200, 20));
-		bottomPanel = new JPanel();
 		rightPanel = new JPanel(new GridLayout(6, 1));
 
 		jButtonAdd = new JButton("Add");
@@ -49,7 +45,6 @@ public class Client extends JFrame{
 		jbSignIn = new JButton("SignIn");
 		jbSignUp = new JButton("SignUp");
 
-		bottomPanel.add(jTextField, BorderLayout.CENTER);
 		rightPanel.add(jButtonAdd);
 		rightPanel.add(jButtonDelete);
 		rightPanel.add(jbUpload);
@@ -66,7 +61,6 @@ public class Client extends JFrame{
 		topPanel.add(jbSignUp);
 
 		add(jScrollPane, BorderLayout.CENTER);
-		add(bottomPanel, BorderLayout.SOUTH);
 		add(rightPanel, BorderLayout.EAST);
 		add(topPanel, BorderLayout.NORTH);
 

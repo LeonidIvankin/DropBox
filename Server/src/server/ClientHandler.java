@@ -15,10 +15,6 @@ public class ClientHandler {
 	private byte[] barr;
 	private boolean isAuthorized = false;
 
-	public String getName(){
-		return name;
-	}
-
 	public ClientHandler(Socket socket, Server server){
 		try {
 			this.server = server;
@@ -39,6 +35,10 @@ public class ClientHandler {
 				e.printStackTrace();
 			}
 		});
+	}
+
+	public String getName(){
+		return name;
 	}
 
 	public String[] getFiles(String name) {//получение списка файлов на сервере
@@ -165,4 +165,6 @@ public class ClientHandler {
 		File file = new File(Constant.SERVER_ROOT + "\\" + name);
 		file.mkdir();
 	}
+
+
 }

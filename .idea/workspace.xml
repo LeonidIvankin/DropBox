@@ -4,18 +4,7 @@
     <list default="true" id="5ec3b36c-b68b-4536-809b-725215733290" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/Client/src/client/Client.java" afterPath="$PROJECT_DIR$/Client/src/client/Client.java" />
       <change beforePath="$PROJECT_DIR$/Client/src/client/Control.java" afterPath="$PROJECT_DIR$/Client/src/client/Control.java" />
-      <change beforePath="$PROJECT_DIR$/Common/src/common/Constant.java" afterPath="$PROJECT_DIR$/Common/src/common/Constant.java" />
-      <change beforePath="$PROJECT_DIR$/DB/dropbox.db" afterPath="$PROJECT_DIR$/DB/dropbox.db" />
-      <change beforePath="$PROJECT_DIR$/DB/src/db/DBService.java" afterPath="$PROJECT_DIR$/DB/src/db/DBService.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/files/ivan/1.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Server/src/files/ivan/2.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Server/src/files/ivan/3.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Server/src/files/ivan/4.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Server/src/files/ivan/5.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Server/src/files/ivan/6.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Server/src/files/ivan/7.txt" afterPath="" />
       <change beforePath="$PROJECT_DIR$/Server/src/server/ClientHandler.java" afterPath="$PROJECT_DIR$/Server/src/server/ClientHandler.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/server/Server.java" afterPath="$PROJECT_DIR$/Server/src/server/Server.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,8 +19,8 @@
       <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/client/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="601">
-              <caret line="65" column="27" lean-forward="false" selection-start-line="65" selection-start-column="27" selection-end-line="65" selection-end-column="27" />
+            <state relative-caret-position="29">
+              <caret line="36" column="0" lean-forward="false" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -49,15 +38,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ClientHandler.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ClientHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Server/src/server/ClientHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="106" column="73" lean-forward="false" selection-start-line="106" selection-start-column="73" selection-end-line="106" selection-end-column="73" />
+            <state relative-caret-position="590">
+              <caret line="168" column="0" lean-forward="false" selection-start-line="168" selection-start-column="0" selection-end-line="168" selection-end-column="0" />
               <folding>
                 <element signature="method#ClientHandler#0;class#ClientHandler#0" expanded="false" />
+                <element signature="method#getFiles#0;class#ClientHandler#0" expanded="false" />
                 <element signature="method#sendPacket#0;class#ClientHandler#0" expanded="false" />
                 <element signature="method#takePacket#0;class#ClientHandler#0" expanded="false" />
+                <element signature="method#signIn#0;class#ClientHandler#0" expanded="false" />
+                <element signature="method#signUp#0;class#ClientHandler#0" expanded="false" />
+                <element signature="method#downloadFile#0;class#ClientHandler#0" expanded="false" />
+                <element signature="method#uploadFile#0;class#ClientHandler#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -79,11 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Control.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Control.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Client/src/client/Control.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="453">
-              <caret line="108" column="0" lean-forward="false" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
+            <state relative-caret-position="1088">
+              <caret line="111" column="5" lean-forward="true" selection-start-line="111" selection-start-column="5" selection-end-line="111" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#listenerDownload#0;class#Control#0" expanded="false" />
@@ -91,7 +85,6 @@
                 <element signature="method#listenerReload#0;class#Control#0" expanded="false" />
                 <element signature="method#listenerSignIn#0;class#Control#0" expanded="false" />
                 <element signature="method#start#0;class#Control#0" expanded="false" />
-                <element signature="method#setAuthorized#0;class#Control#0" expanded="false" />
                 <element signature="method#sendPacket#0;class#Control#0" expanded="false" />
                 <element signature="method#takePacket#0;class#Control#0" expanded="false" />
                 <element signature="method#checkHead#0;class#Control#0" expanded="false" />
@@ -179,12 +172,12 @@
         <option value="$PROJECT_DIR$/Client/src/_old/SaveFile.java" />
         <option value="$PROJECT_DIR$/Client/src/_old/FileTypeFilter.java" />
         <option value="$PROJECT_DIR$/Client/src/_old/Main2.java" />
-        <option value="$PROJECT_DIR$/Client/src/client/Client.java" />
         <option value="$PROJECT_DIR$/Common/src/common/Constant.java" />
-        <option value="$PROJECT_DIR$/Client/src/client/Control.java" />
         <option value="$PROJECT_DIR$/Server/src/server/Server.java" />
         <option value="$PROJECT_DIR$/DB/src/db/DBService.java" />
         <option value="$PROJECT_DIR$/Server/src/server/ClientHandler.java" />
+        <option value="$PROJECT_DIR$/Client/src/client/Control.java" />
+        <option value="$PROJECT_DIR$/Client/src/client/Client.java" />
       </list>
     </option>
   </component>
@@ -545,7 +538,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3159609" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31491712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -779,16 +772,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/client/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="601">
-          <caret line="65" column="27" lean-forward="false" selection-start-line="65" selection-start-column="27" selection-end-line="65" selection-end-column="27" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/DB/src/db/DBService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="260">
@@ -819,27 +802,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/client/Control.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
-          <caret line="108" column="0" lean-forward="false" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#listenerDownload#0;class#Control#0" expanded="false" />
-            <element signature="method#listenerUpload#0;class#Control#0" expanded="false" />
-            <element signature="method#listenerReload#0;class#Control#0" expanded="false" />
-            <element signature="method#listenerSignIn#0;class#Control#0" expanded="false" />
-            <element signature="method#start#0;class#Control#0" expanded="false" />
-            <element signature="method#setAuthorized#0;class#Control#0" expanded="false" />
-            <element signature="method#sendPacket#0;class#Control#0" expanded="false" />
-            <element signature="method#takePacket#0;class#Control#0" expanded="false" />
-            <element signature="method#checkHead#0;class#Control#0" expanded="false" />
-            <element signature="method#showFileList#0;class#Control#0" expanded="false" />
-            <element signature="method#downloadFile#0;class#Control#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk-9.0.1/lib/src.zip!/java.base/java/io/File.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -850,12 +812,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Server/src/server/ClientHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="106" column="73" lean-forward="false" selection-start-line="106" selection-start-column="73" selection-end-line="106" selection-end-column="73" />
+        <state relative-caret-position="590">
+          <caret line="168" column="0" lean-forward="false" selection-start-line="168" selection-start-column="0" selection-end-line="168" selection-end-column="0" />
           <folding>
             <element signature="method#ClientHandler#0;class#ClientHandler#0" expanded="false" />
+            <element signature="method#getFiles#0;class#ClientHandler#0" expanded="false" />
             <element signature="method#sendPacket#0;class#ClientHandler#0" expanded="false" />
             <element signature="method#takePacket#0;class#ClientHandler#0" expanded="false" />
+            <element signature="method#signIn#0;class#ClientHandler#0" expanded="false" />
+            <element signature="method#signUp#0;class#ClientHandler#0" expanded="false" />
+            <element signature="method#downloadFile#0;class#ClientHandler#0" expanded="false" />
+            <element signature="method#uploadFile#0;class#ClientHandler#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/client/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="29">
+          <caret line="36" column="0" lean-forward="false" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/client/Control.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1088">
+          <caret line="111" column="5" lean-forward="true" selection-start-line="111" selection-start-column="5" selection-end-line="111" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#listenerDownload#0;class#Control#0" expanded="false" />
+            <element signature="method#listenerUpload#0;class#Control#0" expanded="false" />
+            <element signature="method#listenerReload#0;class#Control#0" expanded="false" />
+            <element signature="method#listenerSignIn#0;class#Control#0" expanded="false" />
+            <element signature="method#start#0;class#Control#0" expanded="false" />
+            <element signature="method#sendPacket#0;class#Control#0" expanded="false" />
+            <element signature="method#takePacket#0;class#Control#0" expanded="false" />
+            <element signature="method#checkHead#0;class#Control#0" expanded="false" />
+            <element signature="method#showFileList#0;class#Control#0" expanded="false" />
+            <element signature="method#downloadFile#0;class#Control#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -18,4 +18,7 @@ public interface Constant {
 	String RELOAD = "/reload";
 	String SIGNUP = "/signUp";
 	String DELETE = "/delete";
+	String MAKE_DIR = "/makeDir";
+	String RENAME = "/rename";
+	String NEW_FILE= "/newFile";
 }

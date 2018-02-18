@@ -15,7 +15,7 @@ public class ClientHandler {
 	private byte[] barr;
 	private boolean isAuthorized = false;
 
-	public ClientHandler(Socket socket, Server server){
+	public ClientHandler(Socket socket, Server server) {
 		try {
 			this.server = server;
 			this.socket = socket;
@@ -28,50 +28,17 @@ public class ClientHandler {
 
 		server.executorService.submit(() -> {
 			try {
-				while(true) {
+				while (true) {
 					takePacket(in.readObject());
 				}
-			} catch (Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});
 	}
 
-	public String getName(){
-		return name;
-	}
-
-	public String[] getFiles(String name) {//получение списка файлов на сервере
-		File folder = new File(Constant.SERVER_ROOT + name);
-		return folder.list();
-	}
-
-	public void sendMessage(String msg){//послать текстовое сообщение
-		sendPacket(Constant.TEXT_MESSAGE, msg);
-	}
-
-	public void sendPacket(String head, Object body){//принять заголовок, тело и отправить клиенту
-		Object[] packet = {head, body};
-		try{
-			out.writeObject(packet);
-			out.flush();
-		}catch(IOException e){
-			e.printStackTrace();
-		}
-	}
-
-	public void takePacket(Object answer){//принять сообщение в виде массива Object
-		if(answer instanceof Object[]){
-			Object[] packet = (Object[]) answer;
-			String head = (String) packet[0];
-			Object body = packet[1];
-			checkHead(head, body);
-		}
-
-	}
-
-	public void checkHead(String head, Object body){//в зависимости от head, сделать с body
-		switch (head){
+	public void checkHead(String head, Object body) {//в зависимости от head, сделать с body
+		switch (head) {
 			case Constant.AUTH:
 				signIn(body);
 				break;
@@ -82,7 +49,7 @@ public class ClientHandler {
 				uploadFile(body);
 				break;
 			case Constant.RELOAD:
-				sendPacket(Constant.FILE_LIST, getFiles(this.name));
+				reload();
 				break;
 			case Constant.SIGNUP:
 				signUp(body);
@@ -90,45 +57,112 @@ public class ClientHandler {
 			case Constant.DELETE:
 				delete(body);
 				break;
+			case Constant.MAKE_DIR:
+				makeDir(name + "\\" + body);
+				reload();
+				break;
+			case Constant.RENAME:
+				rename(body);
+				break;
+			case Constant.NEW_FILE:
+				createNewFile(body);
+				break;
+
 		}
 	}
 
-	public void signIn(Object body){//авторизация
+	public String getName() {
+		return name;
+	}
+
+	public String[] getFiles(String name) {//получение списка файлов на сервере
+		File folder = new File(Constant.SERVER_ROOT + name);
+		return folder.list();
+	}
+
+	public void sendMessage(String msg) {//послать текстовое сообщение
+		sendPacket(Constant.TEXT_MESSAGE, msg);
+	}
+
+	public void sendPacket(String head, Object body) {//принять заголовок, тело и отправить клиенту
+		Object[] packet = {head, body};
+		try {
+			out.writeObject(packet);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void takePacket(Object answer) {//принять сообщение в виде массива Object
+		if (answer instanceof Object[]) {
+			Object[] packet = (Object[]) answer;
+			String head = (String) packet[0];
+			Object body = packet[1];
+			checkHead(head, body);
+		}
+
+	}
+
+	private void createNewFile(Object body) {
+		String newFileName = (String) body;
+		File newFile = new File(Constant.SERVER_ROOT + "\\" + this.name + "\\" + newFileName);
+		try {
+			boolean created = newFile.createNewFile();
+			if (created)
+				reload();
+		} catch (IOException ex) {
+			System.out.println(ex.getMessage());
+		}
+	}
+
+	private void rename(Object body) {
+		Object[] objects = (Object[]) body;
+		String nameOld = (String) objects[0];
+		String nameNew = (String) objects[1];
+
+		File fileOld = new File(Constant.SERVER_ROOT + "\\" + this.name + "\\" + nameOld);
+		File fileNew = new File(Constant.SERVER_ROOT + "\\" + this.name + "\\" + nameNew);
+		fileOld.renameTo(fileNew);
+		reload();
+	}
+
+	public void signIn(Object body) {//авторизация
 		Object[] objects = (Object[]) body;
 		String name = (String) objects[0];
 		String pass = (String) objects[1];
 
 		boolean loggedIntoAccount = server.checkLoginAndPass(name, pass);
-		if(loggedIntoAccount){ // если пользователь указал правильные логин/пароль
-			if(!server.isAccountBusy(name)){
+		if (loggedIntoAccount) { // если пользователь указал правильные логин/пароль
+			if (!server.isAccountBusy(name)) {
 				sendPacket(Constant.AUTHOK, null);
 				this.name = name;
 				String[] files = getFiles(this.name);
-				if(files.length != 0){
-					sendPacket(Constant.FILE_LIST, getFiles(this.name));
+				if (files.length != 0) {
+					reload();
 					sendMessage(this.name + ", ваши файлы");
-				}else sendMessage(this.name + ", ваша папка пока пуста");
+				} else sendMessage(this.name + ", ваша папка пока пуста");
 				isAuthorized = true;
-			}else sendMessage("Учетная запись уже используется");
-		}else sendMessage("Не верные логин/пароль");
+			} else sendMessage("Учетная запись уже используется");
+		} else sendMessage("Не верные логин/пароль");
 	}
 
-	public void signUp(Object body){//регистрация
+	public void signUp(Object body) {//регистрация
 		Object[] objects = (Object[]) body;
 		String name = (String) objects[0];
 		String pass = (String) objects[1];
 
 		boolean loginIsReserved = server.checkLogin(name);
-		if(name.equals("") && pass.equals("")){
+		if (name.equals("") && pass.equals("")) {
 			sendMessage("Введите логин и пароль и повторите");
-		}else if(name.equals("")){
+		} else if (name.equals("")) {
 			sendMessage("Введите логин");
-		}else{
-			if(loginIsReserved){
+		} else {
+			if (loginIsReserved) {
 				sendMessage("Логин занят");
-			}else if(pass.equals("")){
+			} else if (pass.equals("")) {
 				sendMessage("Логин свободен. Введите пароль и повторите");
-			}else {
+			} else {
 				System.out.println(server.setLoginAndPass(name, pass));
 				makeDir(name);
 				sendMessage("Вы успешно зарегистрированы");
@@ -137,15 +171,15 @@ public class ClientHandler {
 		}
 	}
 
-	public void downloadFile(Object body){//скачать файл с сервера
+	public void downloadFile(Object body) {//скачать файл с сервера
 		String path = (String) body;
 		filePath = new File(Constant.SERVER_ROOT + name + "\\" + path);//откуда файл скачать с сервера
 		int a = (int) filePath.length();
-		try (InputStream in = new BufferedInputStream(new FileInputStream(filePath), a)){
+		try (InputStream in = new BufferedInputStream(new FileInputStream(filePath), a)) {
 			barr = new byte[a];
 			in.read(barr);
 			sendPacket(Constant.DOWNLOAD, barr);
-		}catch (Exception e1){
+		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 	}
@@ -157,24 +191,26 @@ public class ClientHandler {
 		barr = (byte[]) uploadFile[1];
 		filePath = new File(Constant.SERVER_ROOT + name + "\\" + fileName);
 
-		try (OutputStream out = new BufferedOutputStream(new FileOutputStream(filePath), Constant.BUFFER_SIZE)){
+		try (OutputStream out = new BufferedOutputStream(new FileOutputStream(filePath), Constant.BUFFER_SIZE)) {
 			out.write(barr);
-		}catch (Exception e1){
+		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		sendPacket(Constant.FILE_LIST, getFiles(this.name));
+		reload();
 	}
 
-	public void makeDir(String name){//создание каталога на сервере
+	public void makeDir(String name) {//создание каталога на сервере
 		File file = new File(Constant.SERVER_ROOT + "\\" + name);
 		file.mkdir();
 	}
 
-	public void delete(Object body){
+	public void delete(Object body) {
 		File file = new File(Constant.SERVER_ROOT + "\\" + name + "\\" + body);
 		file.delete();
-		sendPacket(Constant.FILE_LIST, getFiles(this.name));
+		reload();
 	}
 
-
+	public void reload(){
+		sendPacket(Constant.FILE_LIST, getFiles(this.name));
+	}
 }

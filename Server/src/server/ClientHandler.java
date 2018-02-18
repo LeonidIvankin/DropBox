@@ -87,6 +87,9 @@ public class ClientHandler {
 			case Constant.SIGNUP:
 				signUp(body);
 				break;
+			case Constant.DELETE:
+				delete(body);
+				break;
 		}
 	}
 
@@ -137,8 +140,9 @@ public class ClientHandler {
 	public void downloadFile(Object body){//скачать файл с сервера
 		String path = (String) body;
 		filePath = new File(Constant.SERVER_ROOT + name + "\\" + path);//откуда файл скачать с сервера
-		try (InputStream in = new BufferedInputStream(new FileInputStream(filePath), Constant.BUFFER_SIZE)){
-			barr = new byte[Constant.BUFFER_SIZE];
+		int a = (int) filePath.length();
+		try (InputStream in = new BufferedInputStream(new FileInputStream(filePath), a)){
+			barr = new byte[a];
 			in.read(barr);
 			sendPacket(Constant.DOWNLOAD, barr);
 		}catch (Exception e1){
@@ -164,6 +168,12 @@ public class ClientHandler {
 	public void makeDir(String name){//создание каталога на сервере
 		File file = new File(Constant.SERVER_ROOT + "\\" + name);
 		file.mkdir();
+	}
+
+	public void delete(Object body){
+		File file = new File(Constant.SERVER_ROOT + "\\" + name + "\\" + body);
+		file.delete();
+		sendPacket(Constant.FILE_LIST, getFiles(this.name));
 	}
 
 

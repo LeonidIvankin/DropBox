@@ -1,6 +1,7 @@
 
 package client;
 
+import _old.JOptionPaneTest1;
 import common.Constant;
 
 import javax.swing.*;
@@ -42,13 +43,15 @@ class Control{
 		listenerDownload();
 		listenerUpload();
 		listenerReload();
+		listenerDelete();
+
+
 
 		start();
 		setAuthorized(false);
 	}
 
-
-	public void listenerDownload(){
+	public void listenerDownload(){//скачать файл с сервера
 		client.jbDownload.addActionListener(e -> {
 			JFileChooser fs = new JFileChooser(new File("c:\\"));
 			fs.setDialogTitle("Save a File");
@@ -56,15 +59,13 @@ class Control{
 			if(result == JFileChooser.APPROVE_OPTION){
 				filePath = fs.getSelectedFile();//куда сохранять файл
 				sendPacket(Constant.DOWNLOAD, client.list.getSelectedValue().toString());//какой файл выбрали в списке
-				//System.out.println(Constant.DOWNLOAD + " " + client.list.getSelectedValue());
-				//System.out.println(filePath);
 			}
 		});
 	}
 
-	public void listenerUpload(){
+	public void listenerUpload(){//закачать файл на сервер
 		client.jbUpload.addActionListener(e -> {
-			JFileChooser fs = new JFileChooser(new File("Server\\src\\files\\"));
+			JFileChooser fs = new JFileChooser(new File("c:\\Users\\ILM\\Desktop\\"));
 			fs.setDialogTitle("Open a File");
 			fs.setFileFilter(new FileTypeFilter(".docx", "WordFile"));
 			fs.setFileFilter(new FileTypeFilter(".jpg", "JPEG File"));
@@ -72,8 +73,9 @@ class Control{
 			int result = fs.showOpenDialog(null);
 			if(result == JFileChooser.APPROVE_OPTION){
 				File fi = fs.getSelectedFile();//выделенный файл
-				try (InputStream in = new BufferedInputStream(new FileInputStream(fi.getPath()), Constant.BUFFER_SIZE)){
-					barr = new byte[Constant.BUFFER_SIZE];
+				int a = (int) fi.length();
+				try (InputStream in = new BufferedInputStream(new FileInputStream(fi.getPath()), a)){
+					barr = new byte[a];
 					in.read(barr);
 					Object[] uploadFile = {fi.getName(), barr};
 					sendPacket(Constant.UPLOAD, uploadFile);
@@ -84,13 +86,13 @@ class Control{
 		});
 	}
 
-	public void listenerReload(){
+	public void listenerReload(){//обновить список файлов
 		client.jbReload.addActionListener(e ->{
 			sendPacket(Constant.RELOAD, null);
 		});
 	}
 
-	public void listenerSignIn(){
+	public void listenerSignIn(){//авторизоваться
 		client.jbSignIn.addActionListener(e -> {
 			if(socket == null || socket.isClosed()) start();
 			Object[] objects = {client.jtfLogin.getText(), client.jtfPassword.getText()};
@@ -100,8 +102,7 @@ class Control{
 		});
 	}
 
-
-	public void listenerSignUp(){
+	public void listenerSignUp(){//зарегистрироваться
 		client.jbSignUp.addActionListener(e -> {
 			if(socket == null || socket.isClosed()) start();
 			Object[] objects = {client.jtfLogin.getText(), client.jtfPassword.getText()};
@@ -111,7 +112,20 @@ class Control{
 		});
 	}
 
-
+	private void listenerDelete() {//удаление файла
+		client.jbDelete.addActionListener(e -> {
+			if(client.list.getSelectedValue() != null) {
+				int result = JOptionPane.showConfirmDialog(client,
+						"Вы уверены",
+						"Окно подтверждения",
+						JOptionPane.YES_NO_CANCEL_OPTION,
+						JOptionPane.WARNING_MESSAGE);
+				if (result == 0) {
+					sendPacket(Constant.DELETE, client.list.getSelectedValue().toString());
+				}
+			}
+		});
+	}
 
 	public void start(){
 		try{
@@ -200,7 +214,7 @@ class Control{
 
 	public void downloadFile(Object body){
 		barr = (byte[]) body;
-		try (OutputStream out = new BufferedOutputStream(new FileOutputStream(filePath), Constant.BUFFER_SIZE)){
+		try (OutputStream out = new BufferedOutputStream(new FileOutputStream(filePath), barr.length)){
 			out.write(barr);
 		}catch (Exception e1){
 			e1.printStackTrace();

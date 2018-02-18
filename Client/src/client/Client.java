@@ -11,7 +11,7 @@ public class Client extends JFrame{
 	protected JTextField jtfLogin;
 	protected JPasswordField jtfPassword;
 	protected JPanel topPanel, rightPanel;
-	protected JButton jButtonAdd, jButtonDelete, jbSignIn, jbSignUp, jbUpload, jbDownload, jbExit, jbReload;
+	protected JButton jbAdd, jbDelete, jbSignIn, jbSignUp, jbUpload, jbDownload, jbExit, jbReload, jbConfimation;
 	protected DefaultListModel defaultListModel;
 
 	private Control control;
@@ -36,17 +36,18 @@ public class Client extends JFrame{
 
 		rightPanel = new JPanel(new GridLayout(6, 1));
 
-		jButtonAdd = new JButton("Add");
-		jButtonDelete = new JButton("Delete");
+		jbAdd = new JButton("Add");
+		jbDelete = new JButton("Delete");
 		jbUpload = new JButton("Upload");
 		jbDownload = new JButton("Download");
 		jbExit = new JButton("Exit");
 		jbReload = new JButton("Reload");
 		jbSignIn = new JButton("SignIn");
 		jbSignUp = new JButton("SignUp");
+		jbConfimation = new JButton("Точно?");
 
-		rightPanel.add(jButtonAdd);
-		rightPanel.add(jButtonDelete);
+		rightPanel.add(jbAdd);
+		rightPanel.add(jbDelete);
 		rightPanel.add(jbUpload);
 		rightPanel.add(jbDownload);
 		rightPanel.add(jbReload);
@@ -63,6 +64,10 @@ public class Client extends JFrame{
 		add(jScrollPane, BorderLayout.CENTER);
 		add(rightPanel, BorderLayout.EAST);
 		add(topPanel, BorderLayout.NORTH);
+
+		UIManager.put("OptionPane.yesButtonText", "Да");
+		UIManager.put("OptionPane.noButtonText", "Нет");
+		UIManager.put("OptionPane.cancelButtonText", "Отмена");
 
 		control = new Control(this);
 		setVisible(true);

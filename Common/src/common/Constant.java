@@ -21,4 +21,7 @@ public interface Constant {
 	String MAKE_DIR = "/makeDir";
 	String RENAME = "/rename";
 	String NEW_FILE= "/newFile";
+
+	//messages to the client
+
 }

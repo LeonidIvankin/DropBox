@@ -97,13 +97,18 @@ class Control {
 
 	public void listenerDownload() {//скачать файл с сервера
 		client.jbDownload.addActionListener(e -> {
-			JFileChooser fs = new JFileChooser(new File("c:\\"));
-			fs.setDialogTitle("Save a File");
-			int result = fs.showSaveDialog(null);
-			if (result == JFileChooser.APPROVE_OPTION) {
-				filePath = fs.getSelectedFile();//куда сохранять файл
-				sendPacket(Constant.DOWNLOAD, client.list.getSelectedValue().toString());//какой файл выбрали в списке
+			Object str;
+			if((str = client.list.getSelectedValue()) != null){
+				JFileChooser fs = new JFileChooser(new File("c:\\"));
+				fs.setSelectedFile(new File(str.toString()));
+				fs.setDialogTitle("Save a File");
+				int result = fs.showSaveDialog(null);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					filePath = fs.getSelectedFile();//куда сохранять файл
+					sendPacket(Constant.DOWNLOAD, str.toString());//какой файл выбрали в списке
+				}
 			}
+
 		});
 	}
 

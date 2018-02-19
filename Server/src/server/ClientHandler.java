@@ -26,6 +26,7 @@ public class ClientHandler {
 			e.printStackTrace();
 		}
 
+
 		server.executorService.submit(() -> {
 			try {
 				while (true) {
@@ -84,7 +85,7 @@ public class ClientHandler {
 		sendPacket(Constant.TEXT_MESSAGE, msg);
 	}
 
-	public void sendPacket(String head, Object body) {//принять заголовок, тело и отправить клиенту
+	public void sendPacket(String head, Object body) {//послать объект
 		Object[] packet = {head, body};
 		try {
 			out.writeObject(packet);
@@ -94,7 +95,7 @@ public class ClientHandler {
 		}
 	}
 
-	public void takePacket(Object answer) {//принять сообщение в виде массива Object
+	public void takePacket(Object answer) {//принять объект
 		if (answer instanceof Object[]) {
 			Object[] packet = (Object[]) answer;
 			String head = (String) packet[0];
@@ -104,7 +105,7 @@ public class ClientHandler {
 
 	}
 
-	private void createNewFile(Object body) {
+	private void createNewFile(Object body) {//создать новый файл
 		String newFileName = (String) body;
 		File newFile = new File(Constant.SERVER_ROOT + "\\" + this.name + "\\" + newFileName);
 		try {
@@ -116,13 +117,13 @@ public class ClientHandler {
 		}
 	}
 
-	private void rename(Object body) {
+	private void rename(Object body) {//переименовать файл и каталог
 		Object[] objects = (Object[]) body;
 		String nameOld = (String) objects[0];
 		String nameNew = (String) objects[1];
 
-		File fileOld = new File(Constant.SERVER_ROOT + "\\" + this.name + "\\" + nameOld);
-		File fileNew = new File(Constant.SERVER_ROOT + "\\" + this.name + "\\" + nameNew);
+		File fileOld = new File(Constant.SERVER_ROOT  + this.name + "\\" + nameOld);
+		File fileNew = new File(Constant.SERVER_ROOT  + this.name + "\\" + nameNew);
 		fileOld.renameTo(fileNew);
 		reload();
 	}
@@ -200,12 +201,12 @@ public class ClientHandler {
 	}
 
 	public void makeDir(String name) {//создание каталога на сервере
-		File file = new File(Constant.SERVER_ROOT + "\\" + name);
+		File file = new File(Constant.SERVER_ROOT  + name);
 		file.mkdir();
 	}
 
 	public void delete(Object body) {
-		File file = new File(Constant.SERVER_ROOT + "\\" + name + "\\" + body);
+		File file = new File(Constant.SERVER_ROOT  + name + "\\" + body);
 		file.delete();
 		reload();
 	}

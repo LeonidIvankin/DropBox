@@ -72,8 +72,6 @@ public class Server {
 		return dbService.addData(name, pass);
 	}
 
-
-
 }
 
 

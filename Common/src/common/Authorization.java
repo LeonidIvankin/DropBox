@@ -7,10 +7,12 @@ public class Authorization {
 	private Server server = null;
 	private ClientHandler clientHandler;
 	private boolean isAuthorized = false;
+	private SendTakePacket sendTakePacket;
 
-	public Authorization(ClientHandler clientHandler){
+	public Authorization(ClientHandler clientHandler, SendTakePacket sendTakePacket){
 		this.clientHandler = clientHandler;
 		this.server = clientHandler.getServer();
+		this.sendTakePacket = sendTakePacket;
 	}
 
 	public void signIn(Object body) {//авторизация
@@ -22,7 +24,7 @@ public class Authorization {
 		boolean loggedIntoAccount = server.checkLoginAndPass(name, pass);
 		if (loggedIntoAccount) { // если пользователь указал правильные логин/пароль
 			if (!server.isAccountBusy(name)) {
-				clientHandler.sendPacket(Constant.AUTHOK, null);
+				sendTakePacket.sendPacket(Constant.AUTHOK, null);
 				clientHandler.setName(name);
 				String[] files = clientHandler.getFiles(name);
 				if (files.length != 0) {

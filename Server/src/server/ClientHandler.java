@@ -2,6 +2,8 @@ package server;
 
 import common.Authorization;
 import common.Constant;
+import common.ObjectStream;
+import common.SendTakePacket;
 
 import java.io.*;
 import java.net.Socket;
@@ -16,8 +18,11 @@ public class ClientHandler {
 	private byte[] barr;
 
 	private Authorization authorization;
+	private SendTakePacket sendTakePacket;
+	private ObjectStream objectStream;
 
 	public ClientHandler(Socket socket, Server server) {
+		objectStream = new ObjectStream();
 		try {
 			this.server = server;
 			this.socket = socket;
@@ -28,6 +33,7 @@ public class ClientHandler {
 			e.printStackTrace();
 		}
 
+		sendTakePacket = new SendTakePacket(out);
 
 		server.executorService.submit(() -> {
 			try {
@@ -38,7 +44,7 @@ public class ClientHandler {
 				e.printStackTrace();
 			}
 		});
-		authorization = new Authorization(this);
+		authorization = new Authorization(this, sendTakePacket);
 	}
 
 	public Server getServer() {
@@ -93,18 +99,7 @@ public class ClientHandler {
 	}
 
 	public void sendMessage(String msg) {//послать текстовое сообщение
-		sendPacket(Constant.TEXT_MESSAGE, msg);
-	}
-
-	public void sendPacket(String head, Object body) {//послать объект
-		System.out.println(head);
-		Object[] packet = {head, body};
-		try {
-			out.writeObject(packet);
-			out.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		sendTakePacket.sendPacket(Constant.TEXT_MESSAGE, msg);
 	}
 
 	public void takePacket(Object answer) {//принять объект
@@ -143,28 +138,18 @@ public class ClientHandler {
 	public void downloadFile(Object body) {//скачать файл с сервера
 		String path = (String) body;
 		filePath = new File(Constant.SERVER_ROOT + name + "\\" + path);//откуда файл скачать с сервера
-		int a = (int) filePath.length();
-		try (InputStream in = new BufferedInputStream(new FileInputStream(filePath), a)) {
-			barr = new byte[a];
-			in.read(barr);
-			sendPacket(Constant.DOWNLOAD, barr);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+		barr = objectStream.readFile(filePath);
+		sendTakePacket.sendPacket(Constant.DOWNLOAD, barr);
 	}
 
 	public void uploadFile(Object body) {//загрузить файл на сервер
 		Object[] uploadFile = (Object[]) body;
 		String fileName = (String) uploadFile[0];
-		System.out.println(fileName);
 		barr = (byte[]) uploadFile[1];
 		filePath = new File(Constant.SERVER_ROOT + name + "\\" + fileName);
 
-		try (OutputStream out = new BufferedOutputStream(new FileOutputStream(filePath), Constant.BUFFER_SIZE)) {
-			out.write(barr);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+
+		objectStream.writeFile(barr, filePath);
 		reload();
 	}
 
@@ -180,6 +165,6 @@ public class ClientHandler {
 	}
 
 	public void reload(){
-		sendPacket(Constant.FILE_LIST, getFiles(this.name));
+		sendTakePacket.sendPacket(Constant.FILE_LIST, getFiles(this.name));
 	}
 }

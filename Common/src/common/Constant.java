@@ -12,7 +12,7 @@ public interface Constant {
 	String UPLOAD = "/upload";
 	String END = "/end";
 	String FILE_LIST = "/fileList";
-	String AUTH = "/auth";
+	String SIGNIN = "/signIn";
 	String AUTHOK = "/authok";
 	String TEXT_MESSAGE = "/textMessage";
 	String RELOAD = "/reload";

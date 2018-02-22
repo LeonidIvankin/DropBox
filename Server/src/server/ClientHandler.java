@@ -1,5 +1,6 @@
 package server;
 
+import common.Authorization;
 import common.Constant;
 
 import java.io.*;
@@ -13,7 +14,8 @@ public class ClientHandler {
 	private String name;
 	private File filePath;
 	private byte[] barr;
-	private boolean isAuthorized = false;
+
+	private Authorization authorization;
 
 	public ClientHandler(Socket socket, Server server) {
 		try {
@@ -36,12 +38,17 @@ public class ClientHandler {
 				e.printStackTrace();
 			}
 		});
+		authorization = new Authorization(this);
+	}
+
+	public Server getServer() {
+		return server;
 	}
 
 	public void checkHead(String head, Object body) {//в зависимости от head, сделать с body
 		switch (head) {
-			case Constant.AUTH:
-				signIn(body);
+			case Constant.SIGNIN:
+				authorization.signIn(body);
 				break;
 			case Constant.DOWNLOAD:
 				downloadFile(body);
@@ -53,7 +60,7 @@ public class ClientHandler {
 				reload();
 				break;
 			case Constant.SIGNUP:
-				signUp(body);
+				authorization.signUp(body);
 				break;
 			case Constant.DELETE:
 				delete(body);
@@ -76,6 +83,10 @@ public class ClientHandler {
 		return name;
 	}
 
+	public void setName(String name){
+		this.name = name;
+	}
+
 	public String[] getFiles(String name) {//получение списка файлов на сервере
 		File folder = new File(Constant.SERVER_ROOT + name);
 		return folder.list();
@@ -86,6 +97,7 @@ public class ClientHandler {
 	}
 
 	public void sendPacket(String head, Object body) {//послать объект
+		System.out.println(head);
 		Object[] packet = {head, body};
 		try {
 			out.writeObject(packet);
@@ -126,50 +138,6 @@ public class ClientHandler {
 		File fileNew = new File(Constant.SERVER_ROOT  + this.name + "\\" + nameNew);
 		fileOld.renameTo(fileNew);
 		reload();
-	}
-
-	public void signIn(Object body) {//авторизация
-		Object[] objects = (Object[]) body;
-		String name = (String) objects[0];
-		String pass = (String) objects[1];
-
-		boolean loggedIntoAccount = server.checkLoginAndPass(name, pass);
-		if (loggedIntoAccount) { // если пользователь указал правильные логин/пароль
-			if (!server.isAccountBusy(name)) {
-				sendPacket(Constant.AUTHOK, null);
-				this.name = name;
-				String[] files = getFiles(this.name);
-				if (files.length != 0) {
-					reload();
-					sendMessage(this.name + ", ваши файлы");
-				} else sendMessage(this.name + ", ваша папка пока пуста");
-				isAuthorized = true;
-			} else sendMessage("Учетная запись уже используется");
-		} else sendMessage("Не верные логин/пароль");
-	}
-
-	public void signUp(Object body) {//регистрация
-		Object[] objects = (Object[]) body;
-		String name = (String) objects[0];
-		String pass = (String) objects[1];
-
-		boolean loginIsReserved = server.checkLogin(name);
-		if (name.equals("") && pass.equals("")) {
-			sendMessage("Введите логин и пароль и повторите");
-		} else if (name.equals("")) {
-			sendMessage("Введите логин");
-		} else {
-			if (loginIsReserved) {
-				sendMessage("Логин занят");
-			} else if (pass.equals("")) {
-				sendMessage("Логин свободен. Введите пароль и повторите");
-			} else {
-				System.out.println(server.setLoginAndPass(name, pass));
-				makeDir(name);
-				sendMessage("Вы успешно зарегистрированы");
-				signIn(body);
-			}
-		}
 	}
 
 	public void downloadFile(Object body) {//скачать файл с сервера

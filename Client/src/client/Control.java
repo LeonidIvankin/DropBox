@@ -21,6 +21,7 @@ class Control {
 
 
 	public Control(Client client) {
+		start();
 		this.client = client;
 
 		client.addWindowListener(new WindowAdapter() { //отвечает за закрытие соединения при закрытии окна через крестик
@@ -48,7 +49,7 @@ class Control {
 		listenerCreateNewFile();
 
 
-		start();
+
 		setAuthorized(false);
 	}
 
@@ -145,7 +146,7 @@ class Control {
 		client.jbSignIn.addActionListener(e -> {
 			if (socket == null || socket.isClosed()) start();
 			Object[] objects = {client.jtfLogin.getText(), client.jtfPassword.getText()};
-			sendPacket(Constant.AUTH, objects);
+			sendPacket(Constant.SIGNIN, objects);
 			client.jtfLogin.setText("");
 			client.jtfPassword.setText("");
 		});
@@ -184,7 +185,7 @@ class Control {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Thread thread1 = new Thread(() -> {
+		Thread thread = new Thread(() -> {
 			try {
 				while (true) {
 					takePacket(in.readObject());
@@ -203,7 +204,7 @@ class Control {
 				}
 			}
 		});
-		thread1.start();
+		thread.start();
 	}
 
 	public void setAuthorized(boolean authorized) { //скрываем панели для авторизованых и неавторизованых пользователей

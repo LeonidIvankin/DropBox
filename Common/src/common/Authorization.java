@@ -26,6 +26,7 @@ public class Authorization {
 			if (!server.isAccountBusy(name)) {
 				sendTakePacket.sendPacket(Constant.AUTHOK, null);
 				clientHandler.setName(name);
+				clientHandler.setClientDir(Constant.SERVER_ROOT + name);
 				String[] files = clientHandler.getFiles(name);
 				if (files.length != 0) {
 					clientHandler.reload();

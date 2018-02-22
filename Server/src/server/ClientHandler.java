@@ -21,6 +21,8 @@ public class ClientHandler {
 	private SendTakePacket sendTakePacket;
 	private ObjectStream objectStream;
 
+	private String clientDir;
+
 	public ClientHandler(Socket socket, Server server) {
 		objectStream = new ObjectStream();
 		try {
@@ -45,6 +47,7 @@ public class ClientHandler {
 			}
 		});
 		authorization = new Authorization(this, sendTakePacket);
+
 	}
 
 	public Server getServer() {
@@ -55,6 +58,7 @@ public class ClientHandler {
 		switch (head) {
 			case Constant.SIGNIN:
 				authorization.signIn(body);
+
 				break;
 			case Constant.DOWNLOAD:
 				downloadFile(body);
@@ -72,8 +76,7 @@ public class ClientHandler {
 				delete(body);
 				break;
 			case Constant.MAKE_DIR:
-				makeDir(name + "\\" + body);
-				reload();
+				createNewDir(body);
 				break;
 			case Constant.RENAME:
 				rename(body);
@@ -87,6 +90,10 @@ public class ClientHandler {
 
 	public String getName() {
 		return name;
+	}
+
+	public void setClientDir(String clientDir) {
+		this.clientDir = clientDir;
 	}
 
 	public void setName(String name){
@@ -112,32 +119,41 @@ public class ClientHandler {
 
 	}
 
-	private void createNewFile(Object body) {//создать новый файл
+	public void createNewFile(Object body) {//создать новый файл
 		String newFileName = (String) body;
-		File newFile = new File(Constant.SERVER_ROOT + "\\" + this.name + "\\" + newFileName);
+		//File newFile = new File(clientDir + "\\" + newFileName);
+		File newFile = new File(concatenation(clientDir, newFileName));
 		try {
 			boolean created = newFile.createNewFile();
-			if (created)
+			if (created){
 				reload();
+				sendMessage("Создан новый файл " + newFileName);
+			}
 		} catch (IOException ex) {
 			System.out.println(ex.getMessage());
 		}
 	}
 
-	private void rename(Object body) {//переименовать файл и каталог
+	public void createNewDir(Object body){
+		String dirName = (String) body;
+		makeDir(concatenation(name, dirName));
+		sendMessage("Создана новая папка " + dirName);
+	}
+
+	public void rename(Object body) {//переименовать файл и каталог
 		Object[] objects = (Object[]) body;
 		String nameOld = (String) objects[0];
 		String nameNew = (String) objects[1];
 
-		File fileOld = new File(Constant.SERVER_ROOT  + this.name + "\\" + nameOld);
-		File fileNew = new File(Constant.SERVER_ROOT  + this.name + "\\" + nameNew);
+		File fileOld = new File(concatenation(clientDir, nameOld));
+		File fileNew = new File(concatenation(clientDir, nameNew));
 		fileOld.renameTo(fileNew);
 		reload();
 	}
 
 	public void downloadFile(Object body) {//скачать файл с сервера
 		String path = (String) body;
-		filePath = new File(Constant.SERVER_ROOT + name + "\\" + path);//откуда файл скачать с сервера
+		filePath = new File(concatenation(clientDir, path));//откуда файл скачать с сервера
 		barr = objectStream.readFile(filePath);
 		sendTakePacket.sendPacket(Constant.DOWNLOAD, barr);
 	}
@@ -146,9 +162,7 @@ public class ClientHandler {
 		Object[] uploadFile = (Object[]) body;
 		String fileName = (String) uploadFile[0];
 		barr = (byte[]) uploadFile[1];
-		filePath = new File(Constant.SERVER_ROOT + name + "\\" + fileName);
-
-
+		filePath = new File(concatenation(clientDir, fileName));
 		objectStream.writeFile(barr, filePath);
 		reload();
 	}
@@ -159,12 +173,23 @@ public class ClientHandler {
 	}
 
 	public void delete(Object body) {
-		File file = new File(Constant.SERVER_ROOT  + name + "\\" + body);
+		String fileName = (String) body;
+		File file = new File(concatenation(clientDir, fileName));
 		file.delete();
 		reload();
+		sendMessage("Файл " + fileName + " удалён");
 	}
 
 	public void reload(){
 		sendTakePacket.sendPacket(Constant.FILE_LIST, getFiles(this.name));
+	}
+
+	public String concatenation(String ... strs){
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 0; i < strs.length; i++) {
+			stringBuilder.append(strs[i]);
+			if(i < strs.length - 1) stringBuilder.append("\\");
+		}
+		return stringBuilder.toString();
 	}
 }

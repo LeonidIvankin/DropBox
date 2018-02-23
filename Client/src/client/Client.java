@@ -15,6 +15,7 @@ public class Client extends JFrame{
 	protected DefaultListModel defaultListModel;
 
 	private Control control;
+	private MouseListenerList mouseListenerList;
 
 
 
@@ -73,6 +74,7 @@ public class Client extends JFrame{
 		UIManager.put("OptionPane.cancelButtonText", "Отмена");
 
 		control = new Control(this);
+		mouseListenerList = new MouseListenerList(list);
 		setVisible(true);
 	}
 }

@@ -4,8 +4,7 @@ package client;
 import common.*;
 
 import javax.swing.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
 
@@ -48,8 +47,6 @@ class Control {
 		String[] strings = {"leo", "1111"};
 		sendTakePacket.sendPacket(Constant.SIGNIN, strings);
 
-
-
 		listenerSignIn();
 		listenerSignUp();
 		listenerDownload();
@@ -60,10 +57,10 @@ class Control {
 		listenerRename();
 		listenerCreateNewFile();
 
-
-
 		setAuthorized(false);
 	}
+
+
 
 	public void start() {
 		try {

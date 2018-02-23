@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
-import java.util.Arrays;
 
 
 class Control {
@@ -131,7 +130,7 @@ class Control {
 	}
 
 	private void listenerMakeDir() {//создание каталога
-		client.jbMakeDir.addActionListener(e -> {
+		client.jbCreateNewDir.addActionListener(e -> {
 			String str = JOptionPane.showInputDialog(client,
 					new String[]{"Введите наименование каталога"},
 					"Создание нового каталога",

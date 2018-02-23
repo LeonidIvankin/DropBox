@@ -11,7 +11,7 @@ public class Client extends JFrame{
 	protected JTextField jtfLogin;
 	protected JPasswordField jtfPassword;
 	protected JPanel topPanel, rightPanel;
-	protected JButton jbMakeDir, jbDelete, jbSignIn, jbSignUp, jbUpload, jbDownload, jbExit, jbReload, jbRename, jbCreateNewFile;
+	protected JButton jbCreateNewDir, jbDelete, jbSignIn, jbSignUp, jbUpload, jbDownload, jbExit, jbReload, jbRename, jbCreateNewFile;
 	protected DefaultListModel defaultListModel;
 
 	private Control control;
@@ -35,26 +35,28 @@ public class Client extends JFrame{
 		jScrollPane = new JScrollPane(list);
 		jScrollPane.setPreferredSize(new Dimension(200, 200));
 
-		rightPanel = new JPanel(new GridLayout(7, 1));
+		rightPanel = new JPanel(new GridLayout(8, 1));
 
-		jbMakeDir = new JButton("Make dir");
-		jbDelete = new JButton("Delete");
-		jbUpload = new JButton("Upload");
-		jbDownload = new JButton("Download");
-		jbExit = new JButton("Exit");
-		jbReload = new JButton("Reload");
 		jbSignIn = new JButton("SignIn");
 		jbSignUp = new JButton("SignUp");
-		jbRename = new JButton("Rename");
-		jbCreateNewFile = new JButton("New File");
 
-		rightPanel.add(jbMakeDir);
-		rightPanel.add(jbDelete);
+		jbUpload = new JButton("Upload");
+		jbDownload = new JButton("Download");
+		jbCreateNewDir = new JButton("New dir");
+		jbCreateNewFile = new JButton("New File");
+		jbDelete = new JButton("Delete");
+		jbReload = new JButton("Reload");
+		jbRename = new JButton("Rename");
+		jbExit = new JButton("Exit");
+
 		rightPanel.add(jbUpload);
 		rightPanel.add(jbDownload);
+		rightPanel.add(jbCreateNewDir);
+		rightPanel.add(jbCreateNewFile);
+		rightPanel.add(jbDelete);
 		rightPanel.add(jbReload);
 		rightPanel.add(jbRename);
-		rightPanel.add(jbCreateNewFile);
+		rightPanel.add(jbExit);
 
 		jtfLogin = new JTextField();
 		jtfPassword = new JPasswordField();

@@ -53,23 +53,23 @@ public class Server {
 		}
 	}
 
-	public boolean isAccountBusy(String name){
+	public boolean isAccountBusy(String login){
 		for(ClientHandler c: clients){
-			if(c.getName().equals(name)) return true;
+			if(c.getLogin().equals(login)) return true;
 		}
 		return false;
 	}
 
-	public boolean checkLoginAndPass(String name, String pass){
-		return dbService.checkLoginAndPass(name, pass);
+	public boolean checkLoginAndPass(String login, String pass){
+		return dbService.checkLoginAndPass(login, pass);
 	}
 
-	public boolean checkLogin(String name){
-		return dbService.checkLogin(name);
+	public boolean checkLogin(String login){
+		return dbService.checkLogin(login);
 	}
 
-	public boolean setLoginAndPass(String name, String pass){
-		return dbService.addData(name, pass);
+	public boolean setLoginAndPass(String login, String pass){
+		return dbService.addData(login, pass);
 	}
 
 }

@@ -12,7 +12,7 @@ public class ClientHandler {
 	private Socket socket = null;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
-	private String name;
+	private String login;
 	private File filePath;
 	private File folder;
 	private byte[] barr;
@@ -29,7 +29,7 @@ public class ClientHandler {
 		try {
 			this.server = server;
 			this.socket = socket;
-			name = "undefined";
+			login = "undefined";
 			in = new ObjectInputStream(socket.getInputStream());
 			out = new ObjectOutputStream(socket.getOutputStream());
 		} catch (Exception e) {
@@ -92,8 +92,8 @@ public class ClientHandler {
 		}
 	}
 
-	public String getName() {
-		return name;
+	public String getLogin() {
+		return login;
 	}
 
 	public String[] getListFiles(String path) {//получение списка файлов на сервере. Сортировка каталогов и файлов
@@ -145,7 +145,7 @@ public class ClientHandler {
 
 	public void createNewDir(Object body){
 		String dirName = (String) body;
-		makeDir(concatenation(name, dirName));
+		makeDir(concatenation(login, dirName));
 		sendMessage("Создана новая папка " + dirName);
 	}
 
@@ -176,8 +176,8 @@ public class ClientHandler {
 		reload(clientAbsolutePath);
 	}
 
-	public void makeDir(String name) {//создание каталога на сервере
-		File file = new File(Constant.SERVER_ROOT  + name);
+	public void makeDir(String nameDir) {//создание каталога на сервере
+		File file = new File(Constant.SERVER_ROOT  + nameDir);
 		file.mkdir();
 	}
 
@@ -207,15 +207,15 @@ public class ClientHandler {
 		}
 	}
 
-	public void loginToAccount(String name){
-		this.name = name;
+	public void loginToAccount(String login){
+		this.login = login;
 
-		clientDir = concatenation(Constant.SERVER_ROOT, name);
+		clientDir = concatenation(Constant.SERVER_ROOT, login);
 		clientAbsolutePath = clientDir;
 		String[] files = getListFiles(clientAbsolutePath);
 		if (files.length != 0) {
 			reload(clientAbsolutePath);
-		} else sendMessage(name + ", ваша папка пока пуста");
+		} else sendMessage(login + ", ваша папка пока пуста");
 	}
 
 	public String concatenation(String ... strs){

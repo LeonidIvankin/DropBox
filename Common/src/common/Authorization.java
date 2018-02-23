@@ -18,14 +18,14 @@ public class Authorization {
 	public void signIn(Object body) {//авторизация
 
 		Object[] objects = (Object[]) body;
-		String name = (String) objects[0];
+		String login = (String) objects[0];
 		String pass = (String) objects[1];
 
-		boolean loggedIntoAccount = server.checkLoginAndPass(name, pass);
+		boolean loggedIntoAccount = server.checkLoginAndPass(login, pass);
 		if (loggedIntoAccount) { // если пользователь указал правильные логин/пароль
-			if (!server.isAccountBusy(name)) {
+			if (!server.isAccountBusy(login)) {
 				workWithPacket.sendPacket(Constant.AUTHOK, null);
-				clientHandler.loginToAccount(name);
+				clientHandler.loginToAccount(login);
 				isAuthorized = true;
 
 			} else sendMessage("Учетная запись уже используется");
@@ -34,13 +34,13 @@ public class Authorization {
 
 	public void signUp(Object body) {//регистрация
 		Object[] objects = (Object[]) body;
-		String name = (String) objects[0];
+		String login = (String) objects[0];
 		String pass = (String) objects[1];
 
-		boolean loginIsReserved = server.checkLogin(name);
-		if (name.equals("") && pass.equals("")) {
+		boolean loginIsReserved = server.checkLogin(login);
+		if (login.equals("") && pass.equals("")) {
 			sendMessage("Введите логин и пароль и повторите");
-		} else if (name.equals("")) {
+		} else if (login.equals("")) {
 			sendMessage("Введите логин");
 		} else {
 			if (loginIsReserved) {
@@ -48,8 +48,8 @@ public class Authorization {
 			} else if (pass.equals("")) {
 				sendMessage("Логин свободен. Введите пароль и повторите");
 			} else {
-				System.out.println(server.setLoginAndPass(name, pass));
-				clientHandler.makeDir(name);
+				System.out.println(server.setLoginAndPass(login, pass));
+				clientHandler.makeDir(login);
 				sendMessage("Вы успешно зарегистрированы");
 				signIn(body);
 			}

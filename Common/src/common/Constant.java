@@ -7,7 +7,7 @@ public interface Constant {
 	int BUFFER_SIZE = 2097152;
 
 	//Default path
-	String SERVER_ROOT = "Server\\src\\files\\";
+	String SERVER_ROOT = "Server\\src\\files";
 	String UPLOAD_DIR = "c:\\Users\\ILM\\Desktop\\";
 	String DOWNLOAD_DIR = "c:\\";
 
@@ -25,7 +25,8 @@ public interface Constant {
 	String DELETE = "/delete";
 	String MAKE_DIR = "/makeDir";
 	String RENAME = "/rename";
-	String NEW_FILE= "/newFile";
+	String NEW_FILE = "/newFile";
+	String MOVE = "/moveOnTree";
 
 	//messages to the client
 

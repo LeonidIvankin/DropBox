@@ -10,13 +10,15 @@ import java.net.Socket;
 
 
 class Control {
-	Client client;
 	private byte[] barr;
 	private Socket socket;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private File filePath;
+
 	private boolean isAuthorized = false;
+
+	private Client client;
 	private SendTakePacket sendTakePacket;
 	private ObjectStream objectStream;
 
@@ -47,6 +49,8 @@ class Control {
 		String[] strings = {"leo", "1111"};
 		sendTakePacket.sendPacket(Constant.SIGNIN, strings);
 
+
+
 		listenerSignIn();
 		listenerSignUp();
 		listenerDownload();
@@ -59,8 +63,6 @@ class Control {
 
 		setAuthorized(false);
 	}
-
-
 
 	public void start() {
 		try {
@@ -90,6 +92,10 @@ class Control {
 			}
 		});
 		thread.start();
+	}
+
+	public void move(String str){
+		sendTakePacket.sendPacket(Constant.MOVE, str);
 	}
 
 	private void listenerCreateNewFile() {
@@ -209,8 +215,6 @@ class Control {
 			}
 		});
 	}
-
-
 
 	public void setAuthorized(boolean authorized) { //скрываем панели для авторизованых и неавторизованых пользователей
 		isAuthorized = authorized;

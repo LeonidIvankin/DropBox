@@ -25,13 +25,7 @@ public class Authorization {
 		if (loggedIntoAccount) { // если пользователь указал правильные логин/пароль
 			if (!server.isAccountBusy(name)) {
 				sendTakePacket.sendPacket(Constant.AUTHOK, null);
-				clientHandler.setName(name);
-				clientHandler.setClientDir(Constant.SERVER_ROOT + name);
-				String[] files = clientHandler.getFiles();
-				if (files.length != 0) {
-					clientHandler.reload();
-					sendMessage(name + ", ваши файлы");
-				} else sendMessage(name + ", ваша папка пока пуста");
+				clientHandler.loginToAccount(name);
 				isAuthorized = true;
 
 			} else sendMessage("Учетная запись уже используется");

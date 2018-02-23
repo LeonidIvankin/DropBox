@@ -6,9 +6,11 @@ import java.awt.event.MouseListener;
 
 public class MouseListenerList implements MouseListener {
 	private JList list;
+	private Control control;
 
-	public MouseListenerList(JList list) {
+	public MouseListenerList(JList list, Control control) {
 		this.list = list;
+		this.control = control;
 		list.addMouseListener(this);
 
 	}
@@ -20,6 +22,7 @@ public class MouseListenerList implements MouseListener {
 			int index = list.locationToIndex(e.getPoint());
 			if (index >= 0) {
 				Object o = list.getModel().getElementAt(index);
+				control.move(o.toString());
 				System.out.println("Double-clicked on: " + o.toString());
 			}
 		}

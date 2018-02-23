@@ -1,9 +1,6 @@
 package server;
 
-import common.Authorization;
-import common.Constant;
-import common.ObjectStream;
-import common.SendTakePacket;
+import common.*;
 
 import java.io.*;
 import java.net.Socket;
@@ -16,13 +13,16 @@ public class ClientHandler {
 	private ObjectOutputStream out;
 	private String name;
 	private File filePath;
+	private File folder;
 	private byte[] barr;
+	private String clientDir;
+	private String clientAbsolutePath = null;
 
 	private Authorization authorization;
 	private SendTakePacket sendTakePacket;
 	private ObjectStream objectStream;
+	private StringManipulation stringManipulation;
 
-	private String clientDir;
 
 	public ClientHandler(Socket socket, Server server) {
 		objectStream = new ObjectStream();
@@ -48,8 +48,12 @@ public class ClientHandler {
 			}
 		});
 		authorization = new Authorization(this, sendTakePacket);
+		stringManipulation = new StringManipulation();
 
 	}
+
+
+
 
 	public Server getServer() {
 		return server;
@@ -59,7 +63,6 @@ public class ClientHandler {
 		switch (head) {
 			case Constant.SIGNIN:
 				authorization.signIn(body);
-
 				break;
 			case Constant.DOWNLOAD:
 				downloadFile(body);
@@ -68,7 +71,7 @@ public class ClientHandler {
 				uploadFile(body);
 				break;
 			case Constant.RELOAD:
-				reload();
+				reload(clientAbsolutePath);
 				break;
 			case Constant.SIGNUP:
 				authorization.signUp(body);
@@ -85,6 +88,9 @@ public class ClientHandler {
 			case Constant.NEW_FILE:
 				createNewFile(body);
 				break;
+			case Constant.MOVE:
+				moveOnTree(body);
+				break;
 
 		}
 	}
@@ -93,17 +99,12 @@ public class ClientHandler {
 		return name;
 	}
 
-	public void setClientDir(String clientDir) {
-		this.clientDir = clientDir;
-	}
-
-	public void setName(String name){
-		this.name = name;
-	}
-
-	public String[] getFiles() {//получение списка файлов на сервере. Сортировка каталогов и файлов
-		File folder = new File(clientDir);
+	public String[] getListFiles(String path) {//получение списка файлов на сервере. Сортировка каталогов и файлов
+		folder = new File(path);
 		ArrayList<String> arrayList = new ArrayList<>();
+		if(!clientAbsolutePath.equals(clientDir)){
+			arrayList.add("[..]");
+		}
 		for (File file : folder.listFiles()) {
 			if(file.isDirectory()) {
 				arrayList.add("[" + file.getName() + "]");
@@ -137,7 +138,7 @@ public class ClientHandler {
 		try {
 			boolean created = newFile.createNewFile();
 			if (created){
-				reload();
+				reload(clientAbsolutePath);
 				sendMessage("Создан новый файл " + newFileName);
 			}
 		} catch (IOException ex) {
@@ -159,7 +160,7 @@ public class ClientHandler {
 		File fileOld = new File(concatenation(clientDir, nameOld));
 		File fileNew = new File(concatenation(clientDir, nameNew));
 		fileOld.renameTo(fileNew);
-		reload();
+		reload(clientAbsolutePath);
 	}
 
 	public void downloadFile(Object body) {//скачать файл с сервера
@@ -175,7 +176,7 @@ public class ClientHandler {
 		barr = (byte[]) uploadFile[1];
 		filePath = new File(concatenation(clientDir, fileName));
 		objectStream.writeFile(barr, filePath);
-		reload();
+		reload(clientAbsolutePath);
 	}
 
 	public void makeDir(String name) {//создание каталога на сервере
@@ -187,12 +188,36 @@ public class ClientHandler {
 		String fileName = (String) body;
 		File file = new File(concatenation(clientDir, fileName));
 		file.delete();
-		reload();
+		reload(clientAbsolutePath);
 		sendMessage("Файл " + fileName + " удалён");
 	}
 
-	public void reload(){
-		sendTakePacket.sendPacket(Constant.FILE_LIST, getFiles());
+	public void reload(String path){
+		sendTakePacket.sendPacket(Constant.FILE_LIST, getListFiles(path));
+	}
+
+	public void moveOnTree(Object body){
+		String dir = (String) body;
+
+		if(dir.equals("[..]")){
+			clientAbsolutePath = separation(clientAbsolutePath);
+			reload(clientAbsolutePath);
+		} else if(dir.charAt(0) == '[' && dir.charAt(dir.length() - 1) == ']'){
+			dir = dir.substring(1, dir.length() - 1);
+			clientAbsolutePath = concatenation(clientAbsolutePath, dir);
+			reload(clientAbsolutePath);
+		}
+	}
+
+	public void loginToAccount(String name){
+		this.name = name;
+
+		clientDir = concatenation(Constant.SERVER_ROOT, name);
+		clientAbsolutePath = clientDir;
+		String[] files = getListFiles(clientAbsolutePath);
+		if (files.length != 0) {
+			reload(clientAbsolutePath);
+		} else sendMessage(name + ", ваша папка пока пуста");
 	}
 
 	public String concatenation(String ... strs){
@@ -202,5 +227,10 @@ public class ClientHandler {
 			if(i < strs.length - 1) stringBuilder.append("\\");
 		}
 		return stringBuilder.toString();
+	}
+
+	public String separation(String str){
+		int x = str.lastIndexOf("\\");
+		return str.substring(0, x);
 	}
 }

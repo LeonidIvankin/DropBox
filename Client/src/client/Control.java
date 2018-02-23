@@ -246,11 +246,9 @@ class Control {
 				break;
 		}
 	}
-	int i = 0;
 
 	private void showFileList(Object body) {
 		client.defaultListModel.clear();
-		System.out.println(i++);
 		String[] fileList = (String[]) body;
 		for (String fileName : fileList) {
 			client.defaultListModel.addElement(fileName);

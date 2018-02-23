@@ -5,38 +5,15 @@ import java.sql.*;
 public class DBService {
 	private Connection connection;
 	private Statement statement;
-	private PreparedStatement preparedStatement;
-
-	/*CREATE TABLE users (
-    id   INTEGER PRIMARY KEY AUTOINCREMENT,
-    name STRING,
-    pass STRING
-);*/
-
-/*	public db.DBService() {
-		try {
-			connect();
-			//addData();
-			//updateData();
-			//deleteData();
-			checkLoginAndPass();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} finally {
-			disconnect();
-		}
-	}*/
 
 	private void addData() throws SQLException {
-		statement.executeUpdate("INSERT INTO users (name, pass) VALUES ('leo', '1234')");
+		statement.executeUpdate("INSERT INTO users (login, pass) VALUES ('leo', '1234')");
 	}
 
-	public boolean addData(String name, String pass){
+	public boolean addData(String login, String pass){
 
 		try {
-			statement.executeUpdate("INSERT INTO users (name, pass) VALUES ('" + name + "', '" + pass + "')");
+			statement.executeUpdate("INSERT INTO users (login, pass) VALUES ('" + login + "', '" + pass + "')");
 			return true;
 		} catch (SQLException e) {
 			//e.printStackTrace();
@@ -44,22 +21,20 @@ public class DBService {
 		}
 	}
 
-
-
 	private void deleteData() throws SQLException {
-		statement.executeUpdate("DELETE FROM users WHERE name = 'alex';");
+		statement.executeUpdate("DELETE FROM users WHERE login = 'alex';");
 	}
 
 	private void checkLoginAndPass() throws SQLException {
-		ResultSet resultSet = statement.executeQuery("SELECT id, name FROM users WHERE name = 'leo';");
+		ResultSet resultSet = statement.executeQuery("SELECT id, name FROM users WHERE login = 'leo';");
 		while(resultSet.next()) {
-			System.out.println(resultSet.getInt("id") + " " + resultSet.getString("name"));
+			System.out.println(resultSet.getInt("id") + " " + resultSet.getString("login"));
 		}
 	}
 
-	public boolean checkLoginAndPass(String name, String pass){
+	public boolean checkLoginAndPass(String login, String pass){
 		try {
-			ResultSet resultSet = statement.executeQuery("SELECT pass FROM users WHERE name = '" + name + "' AND pass = '" + pass + "';");
+			ResultSet resultSet = statement.executeQuery("SELECT pass FROM users WHERE login = '" + login + "' AND pass = '" + pass + "';");
 			return resultSet.getString("pass").equals(pass);
 		} catch (SQLException e) {
 			//e.printStackTrace();
@@ -67,9 +42,9 @@ public class DBService {
 		}
 	}
 
-	public boolean checkLogin(String name){
+	public boolean checkLogin(String login){
 		try {
-			ResultSet resultSet = statement.executeQuery("SELECT pass FROM users WHERE name = '" + name + "';");
+			ResultSet resultSet = statement.executeQuery("SELECT pass FROM users WHERE login = '" + login + "';");
 			return resultSet.getString("pass") != null;
 		} catch (SQLException e) {
 			//e.printStackTrace();

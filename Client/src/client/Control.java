@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
 
 
 class Control {
@@ -245,9 +246,11 @@ class Control {
 				break;
 		}
 	}
+	int i = 0;
 
 	private void showFileList(Object body) {
 		client.defaultListModel.clear();
+		System.out.println(i++);
 		String[] fileList = (String[]) body;
 		for (String fileName : fileList) {
 			client.defaultListModel.addElement(fileName);

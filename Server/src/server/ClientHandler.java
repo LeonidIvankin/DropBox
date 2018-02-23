@@ -5,6 +5,7 @@ import common.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ClientHandler {
 	private Server server = null;
@@ -189,7 +190,8 @@ public class ClientHandler {
 	}
 
 	public void reload(String path){
-		workWithPacket.sendPacket(Constant.FILE_LIST, getListFiles(path));
+		String[] files = getListFiles(path);
+		workWithPacket.sendPacket(Constant.FILE_LIST, files);
 	}
 
 	public void moveOnTree(Object body){

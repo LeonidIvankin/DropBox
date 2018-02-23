@@ -2,6 +2,7 @@ package common;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
 
 public class WorkWithPacket {
 	private ObjectOutputStream out;
@@ -13,6 +14,7 @@ public class WorkWithPacket {
 
 	public void sendPacket(String head, Object body) {//отправить объект
 		Object[] packet = {head, body};
+
 		try {
 			out.writeObject(packet);
 			out.flush();

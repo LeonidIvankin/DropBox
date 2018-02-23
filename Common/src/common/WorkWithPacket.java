@@ -3,10 +3,10 @@ package common;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-public class SendTakePacket {
+public class WorkWithPacket {
 	private ObjectOutputStream out;
 
-	public SendTakePacket(ObjectOutputStream out){
+	public WorkWithPacket(ObjectOutputStream out){
 		this.out = out;
 
 	}

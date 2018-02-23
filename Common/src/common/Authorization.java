@@ -7,12 +7,12 @@ public class Authorization {
 	private Server server = null;
 	private ClientHandler clientHandler;
 	private boolean isAuthorized = false;
-	private SendTakePacket sendTakePacket;
+	private WorkWithPacket workWithPacket;
 
-	public Authorization(ClientHandler clientHandler, SendTakePacket sendTakePacket){
+	public Authorization(ClientHandler clientHandler, WorkWithPacket workWithPacket){
 		this.clientHandler = clientHandler;
 		this.server = clientHandler.getServer();
-		this.sendTakePacket = sendTakePacket;
+		this.workWithPacket = workWithPacket;
 	}
 
 	public void signIn(Object body) {//авторизация
@@ -24,7 +24,7 @@ public class Authorization {
 		boolean loggedIntoAccount = server.checkLoginAndPass(name, pass);
 		if (loggedIntoAccount) { // если пользователь указал правильные логин/пароль
 			if (!server.isAccountBusy(name)) {
-				sendTakePacket.sendPacket(Constant.AUTHOK, null);
+				workWithPacket.sendPacket(Constant.AUTHOK, null);
 				clientHandler.loginToAccount(name);
 				isAuthorized = true;
 

@@ -19,14 +19,14 @@ class Control {
 	private boolean isAuthorized = false;
 
 	private Client client;
-	private SendTakePacket sendTakePacket;
+	private WorkWithPacket workWithPacket;
 	private ObjectStream objectStream;
 
 
 	public Control(Client client) {
 		start();
 		this.client = client;
-		sendTakePacket = new SendTakePacket(out);
+		workWithPacket = new WorkWithPacket(out);
 		objectStream = new ObjectStream();
 
 
@@ -47,7 +47,7 @@ class Control {
 
 		//для debug
 		String[] strings = {"leo", "1111"};
-		sendTakePacket.sendPacket(Constant.SIGNIN, strings);
+		workWithPacket.sendPacket(Constant.SIGNIN, strings);
 
 
 
@@ -95,7 +95,7 @@ class Control {
 	}
 
 	public void move(String str){
-		sendTakePacket.sendPacket(Constant.MOVE, str);
+		workWithPacket.sendPacket(Constant.MOVE, str);
 	}
 
 	private void listenerCreateNewFile() {
@@ -107,7 +107,7 @@ class Control {
 					null, null, "NewFile.txt");
 
 			if(nameNewFile != null){
-				sendTakePacket.sendPacket(Constant.NEW_FILE, nameNewFile);
+				workWithPacket.sendPacket(Constant.NEW_FILE, nameNewFile);
 			}
 		});
 	}
@@ -123,7 +123,7 @@ class Control {
 						null, null, nameOld);
 				if(nameNew != null){
 					String[] body = {nameOld, nameNew};
-					sendTakePacket.sendPacket(Constant.RENAME, body);
+					workWithPacket.sendPacket(Constant.RENAME, body);
 				}
 			}
 		});
@@ -136,7 +136,7 @@ class Control {
 					"Создание нового каталога",
 					JOptionPane.WARNING_MESSAGE);
 			if(str != null){
-				sendTakePacket.sendPacket(Constant.MAKE_DIR, str);
+				workWithPacket.sendPacket(Constant.MAKE_DIR, str);
 			}
 		});
 	}
@@ -145,13 +145,13 @@ class Control {
 		client.jbDownload.addActionListener(e -> {
 			Object str;
 			if((str = client.list.getSelectedValue()) != null){
-				JFileChooser fs = new JFileChooser(new File(Constant.DOWNLOAD_DIR));
+				JFileChooser fs = new JFileChooser(new File(Constant.DEFAULT_DOWNLOAD_DIR));
 				fs.setSelectedFile(new File(str.toString()));
 				fs.setDialogTitle("Save a File");
 				int result = fs.showSaveDialog(null);
 				if (result == JFileChooser.APPROVE_OPTION) {
 					filePath = fs.getSelectedFile();//куда сохранять файл
-					sendTakePacket.sendPacket(Constant.DOWNLOAD, str.toString());//какой файл выбрали в списке
+					workWithPacket.sendPacket(Constant.DOWNLOAD, str.toString());//какой файл выбрали в списке
 				}
 			}
 
@@ -160,24 +160,21 @@ class Control {
 
 	public void listenerUpload() {//закачать файл на сервер
 		client.jbUpload.addActionListener(e -> {
-			JFileChooser fs = new JFileChooser(new File(Constant.UPLOAD_DIR));
+			JFileChooser fs = new JFileChooser(new File(Constant.DEFAULT_UPLOAD_DIR));
 			fs.setDialogTitle("Open a File");
-			fs.setFileFilter(new FileTypeFilter(".docx", "WordFile"));
-			fs.setFileFilter(new FileTypeFilter(".jpg", "JPEG File"));
-			fs.setFileFilter(new FileTypeFilter(".txt", "TextFile"));
 			int result = fs.showOpenDialog(null);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File fi = fs.getSelectedFile();//выделенный файл
 				barr = objectStream.readFile(fi);
 				Object[] uploadFile = {fi.getName(), barr};
-				sendTakePacket.sendPacket(Constant.UPLOAD, uploadFile);
+				workWithPacket.sendPacket(Constant.UPLOAD, uploadFile);
 			}
 		});
 	}
 
 	public void listenerReload() {//обновить список файлов
 		client.jbReload.addActionListener(e -> {
-			sendTakePacket.sendPacket(Constant.RELOAD, null);
+			workWithPacket.sendPacket(Constant.RELOAD, null);
 		});
 	}
 
@@ -185,7 +182,7 @@ class Control {
 		client.jbSignIn.addActionListener(e -> {
 			if (socket == null || socket.isClosed()) start();
 			Object[] objects = {client.jtfLogin.getText(), client.jtfPassword.getText()};
-			sendTakePacket.sendPacket(Constant.SIGNIN, objects);
+			workWithPacket.sendPacket(Constant.SIGNIN, objects);
 			client.jtfLogin.setText("");
 			client.jtfPassword.setText("");
 		});
@@ -195,7 +192,7 @@ class Control {
 		client.jbSignUp.addActionListener(e -> {
 			if (socket == null || socket.isClosed()) start();
 			Object[] objects = {client.jtfLogin.getText(), client.jtfPassword.getText()};
-			sendTakePacket.sendPacket(Constant.SIGNUP, objects);
+			workWithPacket.sendPacket(Constant.SIGNUP, objects);
 			client.jtfLogin.setText("");
 			client.jtfPassword.setText("");
 		});
@@ -210,7 +207,7 @@ class Control {
 						JOptionPane.YES_NO_CANCEL_OPTION,
 						JOptionPane.WARNING_MESSAGE);
 				if (result == 0) {
-					sendTakePacket.sendPacket(Constant.DELETE, client.list.getSelectedValue().toString());
+					workWithPacket.sendPacket(Constant.DELETE, client.list.getSelectedValue().toString());
 				}
 			}
 		});

@@ -19,10 +19,9 @@ public class ClientHandler {
 	private String clientAbsolutePath = null;
 
 	private Authorization authorization;
-	private SendTakePacket sendTakePacket;
+	private WorkWithPacket workWithPacket;
 	private ObjectStream objectStream;
 	private StringManipulation stringManipulation;
-
 
 	public ClientHandler(Socket socket, Server server) {
 		objectStream = new ObjectStream();
@@ -36,7 +35,7 @@ public class ClientHandler {
 			e.printStackTrace();
 		}
 
-		sendTakePacket = new SendTakePacket(out);
+		workWithPacket = new WorkWithPacket(out);
 
 		server.executorService.submit(() -> {
 			try {
@@ -47,13 +46,10 @@ public class ClientHandler {
 				e.printStackTrace();
 			}
 		});
-		authorization = new Authorization(this, sendTakePacket);
+		authorization = new Authorization(this, workWithPacket);
 		stringManipulation = new StringManipulation();
 
 	}
-
-
-
 
 	public Server getServer() {
 		return server;
@@ -118,7 +114,7 @@ public class ClientHandler {
 	}
 
 	public void sendMessage(String msg) {//послать текстовое сообщение
-		sendTakePacket.sendPacket(Constant.TEXT_MESSAGE, msg);
+		workWithPacket.sendPacket(Constant.TEXT_MESSAGE, msg);
 	}
 
 	public void takePacket(Object answer) {//принять объект
@@ -167,7 +163,7 @@ public class ClientHandler {
 		String path = (String) body;
 		filePath = new File(concatenation(clientDir, path));//откуда файл скачать с сервера
 		barr = objectStream.readFile(filePath);
-		sendTakePacket.sendPacket(Constant.DOWNLOAD, barr);
+		workWithPacket.sendPacket(Constant.DOWNLOAD, barr);
 	}
 
 	public void uploadFile(Object body) {//загрузить файл на сервер
@@ -193,7 +189,7 @@ public class ClientHandler {
 	}
 
 	public void reload(String path){
-		sendTakePacket.sendPacket(Constant.FILE_LIST, getListFiles(path));
+		workWithPacket.sendPacket(Constant.FILE_LIST, getListFiles(path));
 	}
 
 	public void moveOnTree(Object body){

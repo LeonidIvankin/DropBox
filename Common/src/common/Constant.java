@@ -8,13 +8,14 @@ public interface Constant {
 
 	//Default path
 	String SERVER_ROOT = "Server\\src\\files";
-	String UPLOAD_DIR = "c:\\Users\\ILM\\Desktop\\";
-	String DOWNLOAD_DIR = "c:\\";
+	String DEFAULT_UPLOAD_DIR = "c:\\Users\\ILM\\Desktop\\";
+	String DEFAULT_DOWNLOAD_DIR = "c:\\";
 
 
 	//System command
 	String DOWNLOAD = "/download";
 	String UPLOAD = "/upload";
+	String UPLOAD_DIR = "/uploadDir";
 	String END = "/end";
 	String FILE_LIST = "/fileList";
 	String SIGNIN = "/signIn";

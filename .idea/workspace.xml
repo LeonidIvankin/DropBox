@@ -3,11 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="5ec3b36c-b68b-4536-809b-725215733290" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Client/src/client/Control.java" afterPath="$PROJECT_DIR$/Client/src/client/Control.java" />
-      <change beforePath="$PROJECT_DIR$/Client/src/client/FileTypeFilter.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Common/src/common/Authorization.java" afterPath="$PROJECT_DIR$/Common/src/common/Authorization.java" />
+      <change beforePath="$PROJECT_DIR$/2.txt" afterPath="" />
       <change beforePath="$PROJECT_DIR$/Common/src/common/Constant.java" afterPath="$PROJECT_DIR$/Common/src/common/Constant.java" />
-      <change beforePath="$PROJECT_DIR$/Common/src/common/SendTakePacket.java" afterPath="$PROJECT_DIR$/Common/src/common/WorkWithPacket.java" />
+      <change beforePath="$PROJECT_DIR$/Common/src/common/StringManipulation.java" afterPath="$PROJECT_DIR$/Common/src/common/WorkWithString.java" />
+      <change beforePath="$PROJECT_DIR$/Server/src/files/leo/ka ka.txt" afterPath="" />
       <change beforePath="$PROJECT_DIR$/Server/src/server/ClientHandler.java" afterPath="$PROJECT_DIR$/Server/src/server/ClientHandler.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -20,21 +19,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="StringManipulation.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Common/src/common/StringManipulation.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Control.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Control.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/client/Control.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
-              <caret line="170" column="13" lean-forward="true" selection-start-line="170" selection-start-column="13" selection-end-line="170" selection-end-column="13" />
+            <state relative-caret-position="748">
+              <caret line="170" column="13" lean-forward="false" selection-start-line="170" selection-start-column="13" selection-end-line="170" selection-end-column="13" />
               <folding>
                 <element signature="method#Control#0;class#Control#0" expanded="false" />
                 <element signature="method#start#0;class#Control#0" expanded="false" />
@@ -59,18 +48,28 @@
       <file leaf-file-name="WorkWithPacket.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Common/src/common/WorkWithPacket.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+            <state relative-caret-position="374">
+              <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ObjectStream.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ObjectStream.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Common/src/common/ObjectStream.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="306">
-              <caret line="18" column="13" lean-forward="true" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="24" />
+              <caret line="18" column="13" lean-forward="false" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WorkWithString.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Common/src/common/WorkWithString.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -79,11 +78,10 @@
       <file leaf-file-name="ClientHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Server/src/server/ClientHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+            <state relative-caret-position="557">
+              <caret line="49" column="49" lean-forward="false" selection-start-line="49" selection-start-column="49" selection-end-line="49" selection-end-column="49" />
               <folding>
-                <element signature="method#ClientHandler#0;class#ClientHandler#0" expanded="false" />
-                <element signature="e#1004#1140#0" expanded="false" />
+                <element signature="e#1000#1136#0" expanded="false" />
                 <element signature="method#checkHead#0;class#ClientHandler#0" expanded="false" />
                 <element signature="method#getListFiles#0;class#ClientHandler#0" expanded="false" />
                 <element signature="method#takePacket#0;class#ClientHandler#0" expanded="false" />
@@ -99,6 +97,16 @@
                 <element signature="method#concatenation#0;class#ClientHandler#0" expanded="false" />
                 <element signature="method#separation#0;class#ClientHandler#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Constant.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Common/src/common/Constant.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="50" lean-forward="false" selection-start-line="11" selection-start-column="50" selection-end-line="11" selection-end-column="50" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -143,7 +151,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Client/src/TestFrame.java" />
         <option value="$PROJECT_DIR$/Client/src/FileChooserTest.java" />
         <option value="$PROJECT_DIR$/Client/src/Main1.java" />
         <option value="$PROJECT_DIR$/Client/src/Solution.java" />
@@ -191,9 +198,10 @@
         <option value="$PROJECT_DIR$/Client/src/client/MouseListenerList.java" />
         <option value="$PROJECT_DIR$/Common/src/common/Authorization.java" />
         <option value="$PROJECT_DIR$/Client/src/_old1/MainString.java" />
-        <option value="$PROJECT_DIR$/Common/src/common/Constant.java" />
-        <option value="$PROJECT_DIR$/Server/src/server/ClientHandler.java" />
         <option value="$PROJECT_DIR$/Client/src/client/Control.java" />
+        <option value="$PROJECT_DIR$/Common/src/common/WorkWithString.java" />
+        <option value="$PROJECT_DIR$/Server/src/server/ClientHandler.java" />
+        <option value="$PROJECT_DIR$/Common/src/common/Constant.java" />
       </list>
     </option>
   </component>
@@ -203,7 +211,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="width" value="960" />
     <option name="height" value="1040" />
   </component>
@@ -223,7 +231,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -290,8 +299,7 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -302,21 +310,21 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\GeekBrains\JavaInDepthStudy\DropBox\Client\src" />
-      <recent name="E:\GeekBrains\JavaInDepthStudy\DropBox\Server\src" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="_old" />
-      <recent name="client" />
-      <recent name="" />
-      <recent name="files" />
-      <recent name="server" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\GeekBrains\JavaInDepthStudy\DropBox\Client\src\_old" />
       <recent name="E:\GeekBrains\JavaInDepthStudy\DropBox\src" />
       <recent name="E:\GeekBrains\JavaInDepthStudy\DropBox\DB" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="common" />
+      <recent name="_old" />
+      <recent name="client" />
+      <recent name="" />
+      <recent name="files" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\GeekBrains\JavaInDepthStudy\DropBox\Client\src" />
+      <recent name="E:\GeekBrains\JavaInDepthStudy\DropBox\Server\src" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -573,7 +581,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="0" y="0" width="960" height="1040" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Key Promoter X" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -585,13 +593,12 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19116022" sideWeight="0.5044444" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19869708" sideWeight="0.49555555" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19779006" sideWeight="0.49555555" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928178" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1663113" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32596686" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -603,6 +610,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32596686" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -647,13 +655,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk-9.0.1/lib/src.zip!/java.base/java/io/BufferedInputStream.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="184" column="0" lean-forward="true" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk-9.0.1/lib/src.zip!/java.sql/java/sql/ResultSet.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
@@ -661,13 +662,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/client/FileTypeFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/client/FileTypeFilter.java" />
     <entry file="file://$PROJECT_DIR$/DB/src/db/DBService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="260">
@@ -894,9 +889,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-571">
           <caret line="24" column="43" lean-forward="true" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -904,10 +896,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="517">
           <caret line="50" column="17" lean-forward="true" selection-start-line="50" selection-start-column="17" selection-end-line="50" selection-end-column="17" />
-          <folding>
-            <element signature="e#2140#2141#0" expanded="false" />
-            <element signature="e#2195#2196#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -915,11 +903,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="23" column="16" lean-forward="false" selection-start-line="23" selection-start-column="16" selection-end-line="30" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#589#988#0" expanded="false" />
-            <element signature="e#987#988#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -935,21 +918,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="232">
           <caret line="1544" column="15" lean-forward="false" selection-start-line="1544" selection-start-column="15" selection-end-line="1544" selection-end-column="15" />
-          <folding>
-            <element signature="e#61455#61456#0" expanded="false" />
-            <element signature="e#61492#61493#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Common/src/common/StringManipulation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Common/src/common/StringManipulation.java" />
     <entry file="file://$PROJECT_DIR$/Common/src/common/Authorization.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -958,19 +930,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Common/src/common/Constant.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="21" lean-forward="false" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/_old1/MainString.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="14" column="33" lean-forward="true" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -984,29 +947,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Common/src/common/ObjectStream.java">
+    <entry file="file://$PROJECT_DIR$/Common/src/common/WorkWithPacket.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="13" lean-forward="true" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="24" />
+        <state relative-caret-position="374">
+          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Common/src/common/WorkWithPacket.java">
+    <entry file="file://$PROJECT_DIR$/Common/src/common/WorkWithString.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+        <state relative-caret-position="306">
+          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/client/Control.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="748">
+          <caret line="170" column="13" lean-forward="false" selection-start-line="170" selection-start-column="13" selection-end-line="170" selection-end-column="13" />
+          <folding>
+            <element signature="method#Control#0;class#Control#0" expanded="false" />
+            <element signature="method#start#0;class#Control#0" expanded="false" />
+            <element signature="method#listenerCreateNewFile#0;class#Control#0" expanded="false" />
+            <element signature="method#listenerRename#0;class#Control#0" expanded="false" />
+            <element signature="method#listenerMakeDir#0;class#Control#0" expanded="false" />
+            <element signature="method#listenerDownload#0;class#Control#0" expanded="false" />
+            <element signature="method#listenerReload#0;class#Control#0" expanded="false" />
+            <element signature="method#listenerSignIn#0;class#Control#0" expanded="false" />
+            <element signature="method#listenerSignUp#0;class#Control#0" expanded="false" />
+            <element signature="method#listenerDelete#0;class#Control#0" expanded="false" />
+            <element signature="method#setAuthorized#0;class#Control#0" expanded="false" />
+            <element signature="method#takePacket#0;class#Control#0" expanded="false" />
+            <element signature="method#checkHead#0;class#Control#0" expanded="false" />
+            <element signature="method#showFileList#0;class#Control#0" expanded="false" />
+            <element signature="method#downloadFile#0;class#Control#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Server/src/server/ClientHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+        <state relative-caret-position="557">
+          <caret line="49" column="49" lean-forward="false" selection-start-line="49" selection-start-column="49" selection-end-line="49" selection-end-column="49" />
           <folding>
-            <element signature="method#ClientHandler#0;class#ClientHandler#0" expanded="false" />
-            <element signature="e#1004#1140#0" expanded="false" />
+            <element signature="e#1000#1136#0" expanded="false" />
             <element signature="method#checkHead#0;class#ClientHandler#0" expanded="false" />
             <element signature="method#getListFiles#0;class#ClientHandler#0" expanded="false" />
             <element signature="method#takePacket#0;class#ClientHandler#0" expanded="false" />
@@ -1025,27 +1011,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/client/Control.java">
+    <entry file="file://$PROJECT_DIR$/Common/src/common/Constant.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="170" column="13" lean-forward="true" selection-start-line="170" selection-start-column="13" selection-end-line="170" selection-end-column="13" />
-          <folding>
-            <element signature="method#Control#0;class#Control#0" expanded="false" />
-            <element signature="method#start#0;class#Control#0" expanded="false" />
-            <element signature="method#listenerCreateNewFile#0;class#Control#0" expanded="false" />
-            <element signature="method#listenerRename#0;class#Control#0" expanded="false" />
-            <element signature="method#listenerMakeDir#0;class#Control#0" expanded="false" />
-            <element signature="method#listenerDownload#0;class#Control#0" expanded="false" />
-            <element signature="method#listenerReload#0;class#Control#0" expanded="false" />
-            <element signature="method#listenerSignIn#0;class#Control#0" expanded="false" />
-            <element signature="method#listenerSignUp#0;class#Control#0" expanded="false" />
-            <element signature="method#listenerDelete#0;class#Control#0" expanded="false" />
-            <element signature="method#setAuthorized#0;class#Control#0" expanded="false" />
-            <element signature="method#takePacket#0;class#Control#0" expanded="false" />
-            <element signature="method#checkHead#0;class#Control#0" expanded="false" />
-            <element signature="method#showFileList#0;class#Control#0" expanded="false" />
-            <element signature="method#downloadFile#0;class#Control#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="187">
+          <caret line="11" column="50" lean-forward="false" selection-start-line="11" selection-start-column="50" selection-end-line="11" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Common/src/common/ObjectStream.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="13" lean-forward="false" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="24" />
+          <folding />
         </state>
       </provider>
     </entry>

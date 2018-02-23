@@ -1,6 +1,6 @@
 package common;
 
-public class StringManipulation {
+public class WorkWithString {
 
 	public String concatenation(String ... strs){
 		StringBuilder stringBuilder = new StringBuilder();
@@ -9,5 +9,10 @@ public class StringManipulation {
 			if(i < strs.length - 1) stringBuilder.append("\\");
 		}
 		return stringBuilder.toString();
+	}
+
+	public String separation(String str){
+		int x = str.lastIndexOf("\\");
+		return str.substring(0, x);
 	}
 }

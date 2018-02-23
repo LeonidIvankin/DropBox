@@ -21,7 +21,7 @@ public class ClientHandler {
 	private Authorization authorization;
 	private WorkWithPacket workWithPacket;
 	private ObjectStream objectStream;
-	private StringManipulation stringManipulation;
+	private WorkWithString stringManipulation;
 
 	public ClientHandler(Socket socket, Server server) {
 		objectStream = new ObjectStream();
@@ -47,7 +47,7 @@ public class ClientHandler {
 			}
 		});
 		authorization = new Authorization(this, workWithPacket);
-		stringManipulation = new StringManipulation();
+		stringManipulation = new WorkWithString();
 
 	}
 

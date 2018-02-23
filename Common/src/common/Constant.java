@@ -9,7 +9,7 @@ public interface Constant {
 	//Default path
 	String SERVER_ROOT = "Server\\src\\files";
 	String DEFAULT_UPLOAD_DIR = "c:\\Users\\ILM\\Desktop\\";
-	String DEFAULT_DOWNLOAD_DIR = "c:\\";
+	String DEFAULT_DOWNLOAD_DIR = "d:\\Downloads\\";
 
 
 	//System command

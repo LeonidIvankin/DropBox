@@ -7,6 +7,7 @@ import common.SendTakePacket;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ClientHandler {
 	private Server server = null;
@@ -100,9 +101,19 @@ public class ClientHandler {
 		this.name = name;
 	}
 
-	public String[] getFiles(String name) {//получение списка файлов на сервере
-		File folder = new File(Constant.SERVER_ROOT + name);
-		return folder.list();
+	public String[] getFiles() {//получение списка файлов на сервере. Сортировка каталогов и файлов
+		File folder = new File(clientDir);
+		ArrayList<String> arrayList = new ArrayList<>();
+		for (File file : folder.listFiles()) {
+			if(file.isDirectory()) {
+				arrayList.add("[" + file.getName() + "]");
+			}
+		}
+		for (File file : folder.listFiles()) {
+			if(file.isFile()) arrayList.add(file.getName());
+		}
+
+		return arrayList.toArray(new String[arrayList.size()]);
 	}
 
 	public void sendMessage(String msg) {//послать текстовое сообщение
@@ -181,7 +192,7 @@ public class ClientHandler {
 	}
 
 	public void reload(){
-		sendTakePacket.sendPacket(Constant.FILE_LIST, getFiles(this.name));
+		sendTakePacket.sendPacket(Constant.FILE_LIST, getFiles());
 	}
 
 	public String concatenation(String ... strs){

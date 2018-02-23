@@ -27,7 +27,7 @@ public class Authorization {
 				sendTakePacket.sendPacket(Constant.AUTHOK, null);
 				clientHandler.setName(name);
 				clientHandler.setClientDir(Constant.SERVER_ROOT + name);
-				String[] files = clientHandler.getFiles(name);
+				String[] files = clientHandler.getFiles();
 				if (files.length != 0) {
 					clientHandler.reload();
 					sendMessage(name + ", ваши файлы");

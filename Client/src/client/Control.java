@@ -43,6 +43,13 @@ class Control {
 			}
 		});
 
+
+		//для debug
+		String[] strings = {"leo", "1111"};
+		sendTakePacket.sendPacket(Constant.SIGNIN, strings);
+
+
+
 		listenerSignIn();
 		listenerSignUp();
 		listenerDownload();
@@ -56,6 +63,36 @@ class Control {
 
 
 		setAuthorized(false);
+	}
+
+	public void start() {
+		try {
+			socket = new Socket(Constant.SERVER_IP, Constant.PORT);
+			out = new ObjectOutputStream(socket.getOutputStream());
+			in = new ObjectInputStream(socket.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Thread thread = new Thread(() -> {
+			try {
+				while (true) {
+					takePacket(in.readObject());
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+				setAuthorized(false);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		thread.start();
 	}
 
 	private void listenerCreateNewFile() {
@@ -176,35 +213,7 @@ class Control {
 		});
 	}
 
-	public void start() {
-		try {
-			socket = new Socket(Constant.SERVER_IP, Constant.PORT);
-			out = new ObjectOutputStream(socket.getOutputStream());
-			in = new ObjectInputStream(socket.getInputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		Thread thread = new Thread(() -> {
-			try {
-				while (true) {
-					takePacket(in.readObject());
-				}
 
-			} catch (IOException e) {
-				e.printStackTrace();
-				setAuthorized(false);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					socket.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		thread.start();
-	}
 
 	public void setAuthorized(boolean authorized) { //скрываем панели для авторизованых и неавторизованых пользователей
 		isAuthorized = authorized;

@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5ec3b36c-b68b-4536-809b-725215733290" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Client/src/client/Control.java" afterPath="$PROJECT_DIR$/Client/src/client/Control.java" />
-      <change beforePath="$PROJECT_DIR$/Common/src/common/ObjectStream.java" afterPath="$PROJECT_DIR$/Common/src/common/ObjectStream.java" />
+      <change beforePath="$PROJECT_DIR$/Server/src/files/leo/galina/1.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/Server/src/files/leo/galina/1/2/3/5/1.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/Server/src/files/leo/galina/kefir/3.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/Server/src/files/leo/galina/kefir/4.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/Server/src/files/leo/galina/tvorog/1.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/Server/src/files/leo/galina/tvorog/2.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/Server/src/files/leo/leonid.txt" afterPath="" />
       <change beforePath="$PROJECT_DIR$/Server/src/server/ClientHandler.java" afterPath="$PROJECT_DIR$/Server/src/server/ClientHandler.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -20,17 +24,17 @@
       <file leaf-file-name="ClientHandler.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Server/src/server/ClientHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="167" column="5" lean-forward="false" selection-start-line="167" selection-start-column="5" selection-end-line="167" selection-end-column="5" />
+            <state relative-caret-position="479">
+              <caret line="178" column="0" lean-forward="false" selection-start-line="178" selection-start-column="0" selection-end-line="178" selection-end-column="0" />
               <folding>
                 <element signature="e#1278#1279#0" expanded="true" />
                 <element signature="e#1298#1299#0" expanded="true" />
                 <element signature="method#getListFiles#0;class#ClientHandler#0" expanded="false" />
                 <element signature="method#takePacket#0;class#ClientHandler#0" expanded="false" />
                 <element signature="method#createNewFile#0;class#ClientHandler#0" expanded="false" />
-                <element signature="method#createNewDir#0;class#ClientHandler#0" expanded="false" />
                 <element signature="method#rename#0;class#ClientHandler#0" expanded="false" />
-                <element signature="method#makeDir#0;class#ClientHandler#0" expanded="false" />
+                <element signature="method#downloadFile#0;class#ClientHandler#0" expanded="false" />
+                <element signature="method#uploadFile#0;class#ClientHandler#0" expanded="false" />
                 <element signature="method#delete#0;class#ClientHandler#0" expanded="false" />
                 <element signature="method#reload#0;class#ClientHandler#0" expanded="false" />
                 <element signature="method#moveOnTree#0;class#ClientHandler#0" expanded="false" />
@@ -993,17 +997,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Server/src/server/ClientHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="167" column="5" lean-forward="false" selection-start-line="167" selection-start-column="5" selection-end-line="167" selection-end-column="5" />
+        <state relative-caret-position="479">
+          <caret line="178" column="0" lean-forward="false" selection-start-line="178" selection-start-column="0" selection-end-line="178" selection-end-column="0" />
           <folding>
             <element signature="e#1278#1279#0" expanded="true" />
             <element signature="e#1298#1299#0" expanded="true" />
             <element signature="method#getListFiles#0;class#ClientHandler#0" expanded="false" />
             <element signature="method#takePacket#0;class#ClientHandler#0" expanded="false" />
             <element signature="method#createNewFile#0;class#ClientHandler#0" expanded="false" />
-            <element signature="method#createNewDir#0;class#ClientHandler#0" expanded="false" />
             <element signature="method#rename#0;class#ClientHandler#0" expanded="false" />
-            <element signature="method#makeDir#0;class#ClientHandler#0" expanded="false" />
+            <element signature="method#downloadFile#0;class#ClientHandler#0" expanded="false" />
+            <element signature="method#uploadFile#0;class#ClientHandler#0" expanded="false" />
             <element signature="method#delete#0;class#ClientHandler#0" expanded="false" />
             <element signature="method#reload#0;class#ClientHandler#0" expanded="false" />
             <element signature="method#moveOnTree#0;class#ClientHandler#0" expanded="false" />

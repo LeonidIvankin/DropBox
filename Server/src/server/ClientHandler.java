@@ -145,8 +145,8 @@ public class ClientHandler {
 
 	public void createNewDir(Object body){
 		String dirName = (String) body;
-		makeDir(concatenation(login, dirName));
-		sendMessage("Создана новая папка " + dirName);
+		makeDir(dirName);
+		reload(dirCurrent);
 	}
 
 	public void rename(Object body) {//переименовать файл и каталог
@@ -175,7 +175,7 @@ public class ClientHandler {
 	}
 
 	public void makeDir(String nameDir) {//создание каталога на сервере
-		File file = new File(Constant.SERVER_ROOT  + nameDir);
+		File file = new File(concatenation(dirCurrent, nameDir));
 		file.mkdir();
 	}
 

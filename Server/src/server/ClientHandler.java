@@ -5,7 +5,6 @@ import common.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ClientHandler {
 	private Server server = null;
@@ -16,8 +15,8 @@ public class ClientHandler {
 	private File filePath;
 	private File folder;
 	private byte[] barr;
-	private String clientDir;
-	private String clientAbsolutePath = null;
+	private String dirRootClient;
+	private String dirCurrent = null;
 
 	private Authorization authorization;
 	private WorkWithPacket workWithPacket;
@@ -68,7 +67,7 @@ public class ClientHandler {
 				uploadFile(body);
 				break;
 			case Constant.RELOAD:
-				reload(clientAbsolutePath);
+				reload(dirCurrent);
 				break;
 			case Constant.SIGNUP:
 				authorization.signUp(body);
@@ -99,7 +98,7 @@ public class ClientHandler {
 	public String[] getListFiles(String path) {//получение списка файлов на сервере. Сортировка каталогов и файлов
 		folder = new File(path);
 		ArrayList<String> arrayList = new ArrayList<>();
-		if(!clientAbsolutePath.equals(clientDir)){
+		if(!dirCurrent.equals(dirRootClient)){
 			arrayList.add("[..]");
 		}
 		for (File file : folder.listFiles()) {
@@ -130,12 +129,12 @@ public class ClientHandler {
 
 	public void createNewFile(Object body) {//создать новый файл
 		String newFileName = (String) body;
-		//File newFile = new File(clientDir + "\\" + newFileName);
-		File newFile = new File(concatenation(clientDir, newFileName));
+		//File newFile = new File(dirRootClient + "\\" + newFileName);
+		File newFile = new File(concatenation(dirRootClient, newFileName));
 		try {
 			boolean created = newFile.createNewFile();
 			if (created){
-				reload(clientAbsolutePath);
+				reload(dirCurrent);
 				sendMessage("Создан новый файл " + newFileName);
 			}
 		} catch (IOException ex) {
@@ -154,15 +153,15 @@ public class ClientHandler {
 		String nameOld = (String) objects[0];
 		String nameNew = (String) objects[1];
 
-		File fileOld = new File(concatenation(clientDir, nameOld));
-		File fileNew = new File(concatenation(clientDir, nameNew));
+		File fileOld = new File(concatenation(dirRootClient, nameOld));
+		File fileNew = new File(concatenation(dirRootClient, nameNew));
 		fileOld.renameTo(fileNew);
-		reload(clientAbsolutePath);
+		reload(dirCurrent);
 	}
 
 	public void downloadFile(Object body) {//скачать файл с сервера
 		String path = (String) body;
-		filePath = new File(concatenation(clientDir, path));//откуда файл скачать с сервера
+		filePath = new File(concatenation(dirRootClient, path));//откуда файл скачать с сервера
 		barr = objectStream.readFile(filePath);
 		workWithPacket.sendPacket(Constant.DOWNLOAD, barr);
 	}
@@ -171,9 +170,9 @@ public class ClientHandler {
 		Object[] uploadFile = (Object[]) body;
 		String fileName = (String) uploadFile[0];
 		barr = (byte[]) uploadFile[1];
-		filePath = new File(concatenation(clientDir, fileName));
+		filePath = new File(concatenation(dirCurrent, fileName));
 		objectStream.writeFile(barr, filePath);
-		reload(clientAbsolutePath);
+		reload(dirCurrent);
 	}
 
 	public void makeDir(String nameDir) {//создание каталога на сервере
@@ -183,9 +182,9 @@ public class ClientHandler {
 
 	public void delete(Object body) {
 		String fileName = (String) body;
-		File file = new File(concatenation(clientDir, fileName));
+		File file = new File(concatenation(dirRootClient, fileName));
 		file.delete();
-		reload(clientAbsolutePath);
+		reload(dirCurrent);
 		sendMessage("Файл " + fileName + " удалён");
 	}
 
@@ -198,23 +197,23 @@ public class ClientHandler {
 		String dir = (String) body;
 
 		if(dir.equals("[..]")){
-			clientAbsolutePath = separation(clientAbsolutePath);
-			reload(clientAbsolutePath);
+			dirCurrent = separation(dirCurrent);
+			reload(dirCurrent);
 		} else if(dir.charAt(0) == '[' && dir.charAt(dir.length() - 1) == ']'){
 			dir = dir.substring(1, dir.length() - 1);
-			clientAbsolutePath = concatenation(clientAbsolutePath, dir);
-			reload(clientAbsolutePath);
+			dirCurrent = concatenation(dirCurrent, dir);
+			reload(dirCurrent);
 		}
 	}
 
 	public void loginToAccount(String login){
 		this.login = login;
 
-		clientDir = concatenation(Constant.SERVER_ROOT, login);
-		clientAbsolutePath = clientDir;
-		String[] files = getListFiles(clientAbsolutePath);
+		dirRootClient = concatenation(Constant.SERVER_ROOT, login);
+		dirCurrent = dirRootClient;
+		String[] files = getListFiles(dirCurrent);
 		if (files.length != 0) {
-			reload(clientAbsolutePath);
+			reload(dirCurrent);
 		} else sendMessage(login + ", ваша папка пока пуста");
 	}
 

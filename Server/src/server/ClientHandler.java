@@ -33,7 +33,7 @@ public class ClientHandler {
 			in = new ObjectInputStream(socket.getInputStream());
 			out = new ObjectOutputStream(socket.getOutputStream());
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
 		workWithPacket = new WorkWithPacket(out);
@@ -44,7 +44,7 @@ public class ClientHandler {
 					takePacket(in.readObject());
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		});
 		authorization = new Authorization(this, workWithPacket);

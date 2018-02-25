@@ -14,7 +14,7 @@ class Control {
 	private Socket socket;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
-	private File filePath;
+	private File pathAbsoluteElementSave;
 
 	private boolean isAuthorized = false;
 
@@ -143,15 +143,18 @@ class Control {
 
 	public void listenerDownload() {//скачать файл с сервера
 		client.jbDownload.addActionListener(e -> {
-			Object str;
-			if((str = client.list.getSelectedValue()) != null){
-				JFileChooser fs = new JFileChooser(new File(Constant.DEFAULT_DOWNLOAD_DIR));
-				fs.setSelectedFile(new File(str.toString()));
-				fs.setDialogTitle("Save a File");
-				int result = fs.showSaveDialog(null);
+			Object elementSelected;
+			if((elementSelected = client.list.getSelectedValue()) != null){//выделенный элемент в листе
+				String elementSelectedString = elementSelected.toString();//наименование файла по умолчанию leonid.txt [galina]
+				elementSelectedString = WorkWithString.withoutBrackets(elementSelectedString);//наименование файла по умолчанию leonid.txt galina
+				File defaultPath = new File(Constant.DEFAULT_DOWNLOAD_DIR);//путь по умолчанию
+				JFileChooser jFileChooser = new JFileChooser(defaultPath);
+				jFileChooser.setSelectedFile(new File(elementSelectedString));
+				jFileChooser.setDialogTitle("Save a File");
+				int result = jFileChooser.showSaveDialog(null);
 				if (result == JFileChooser.APPROVE_OPTION) {
-					filePath = fs.getSelectedFile();//куда сохранять файл
-					workWithPacket.sendPacket(Constant.DOWNLOAD, str.toString());//какой файл выбрали в списке
+					pathAbsoluteElementSave = jFileChooser.getSelectedFile();//куда сохранять D:\Downloads\leonid.txt D:\Downloads\galina
+					workWithPacket.sendPacket(Constant.DOWNLOAD, elementSelectedString);//какой файл выбрали в списке
 				}
 			}
 
@@ -165,7 +168,7 @@ class Control {
 			int result = fs.showOpenDialog(null);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File fi = fs.getSelectedFile();//выделенный файл
-				barr = objectStream.readFile(fi);
+				//barr = objectStream.readElement(fi);
 				Object[] uploadFile = {fi.getName(), barr};
 				workWithPacket.sendPacket(Constant.UPLOAD, uploadFile);
 			}
@@ -259,7 +262,6 @@ class Control {
 	}
 
 	public void downloadFile(Object body) {
-		barr = (byte[]) body;
-		objectStream.writeFile(barr, filePath);
+		objectStream.writeElement(body, pathAbsoluteElementSave);
 	}
 }

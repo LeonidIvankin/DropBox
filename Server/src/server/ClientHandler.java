@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientHandler {
-	///
+
 	private Server server = null;
 	private Socket socket = null;
 	private ObjectInputStream in;
@@ -162,9 +162,9 @@ public class ClientHandler {
 
 	public void downloadFile(Object body) {//скачать файл с сервера
 		String path = (String) body;
-		filePath = new File(concatenation(dirRootClient, path));//откуда файл скачать с сервера
-		barr = objectStream.readFile(filePath);
-		workWithPacket.sendPacket(Constant.DOWNLOAD, barr);
+		filePath = new File(concatenation(dirRootClient, path));//откуда файл скачать с сервера Server\src\files\leo\galina  Server\src\files\leo\leonid.txt
+		body = objectStream.readElement(filePath);
+		workWithPacket.sendPacket(Constant.DOWNLOAD, body);
 	}
 
 	public void uploadFile(Object body) {//загрузить файл на сервер
@@ -172,7 +172,7 @@ public class ClientHandler {
 		String fileName = (String) uploadFile[0];
 		barr = (byte[]) uploadFile[1];
 		filePath = new File(concatenation(dirCurrent, fileName));
-		objectStream.writeFile(barr, filePath);
+		objectStream.writeElement(barr, filePath);
 		reload(dirCurrent);
 	}
 

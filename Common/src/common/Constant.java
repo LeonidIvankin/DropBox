@@ -28,6 +28,8 @@ public interface Constant {
 	String RENAME = "/rename";
 	String NEW_FILE = "/newFile";
 	String MOVE = "/moveOnTree";
+	String DIR = "/dir";
+	String FILE = "/file";
 
 	//messages to the client
 

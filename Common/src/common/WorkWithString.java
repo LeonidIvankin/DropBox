@@ -15,4 +15,16 @@ public class WorkWithString {
 		int x = str.lastIndexOf("\\");
 		return str.substring(0, x);
 	}
+
+	public static String withoutBrackets(String str){
+		if(str.charAt(0) == '[' && str.charAt(str.length() - 1) == ']'){
+			str = str.substring(1, str.length() - 1);
+		}
+		return str;
+	}
+
+	public static String findReletivePath(String dir, String file){
+		int x = dir.length();
+		return file.substring(x + 1, file.length());
+	}
 }

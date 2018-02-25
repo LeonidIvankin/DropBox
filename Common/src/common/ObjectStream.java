@@ -11,7 +11,8 @@ public class ObjectStream {
 	File filePathRoot;
 
 
-	public void writeElement(Object object, File filePath) {//D:\Downloads\leonid.txt
+	public void writeElement(Object object, File filePath) {//D:\Downloads\leonid.txt		Server\src\files\leo\leonid.txt
+		System.out.println(filePath);
 		Object[] body = (Object[]) object;
 		String flag = (String) body[0];
 
@@ -22,13 +23,10 @@ public class ObjectStream {
 			ArrayList<String> dirs = (ArrayList<String>) body[1];
 			HashMap<String, Object> data = (HashMap<String, Object>) body[2];
 			System.out.println(filePath);
-			//File dir = new File("d:\\Downloads\\11");
 			filePath.mkdir();
 			for (String dirName : dirs) {
-				File dir = new File(filePath + "\\" + dirName);
-				dir.mkdir();
+				new File(filePath + "\\" + dirName).mkdir();
 			}
-
 			for (Map.Entry entry : data.entrySet()) {
 				writeFile((byte[]) entry.getValue(), new File(filePath  + "\\" +  entry.getKey()));
 			}
@@ -36,6 +34,7 @@ public class ObjectStream {
 	}
 
 	public void writeFile(byte[] barr, File filePath){
+		System.out.println(filePath);
 		try (OutputStream out = new BufferedOutputStream(new FileOutputStream(filePath), barr.length)) {
 			out.write(barr);
 		} catch (Exception e1) {
@@ -43,7 +42,7 @@ public class ObjectStream {
 		}
 	}
 
-	public Object readElement(File filePath){//Server\src\files\leo\galina  Server\src\files\leo\leonid.txt
+	public Object readElement(File filePath){//Server\src\files\leo\galina  Server\src\files\leo\leonid.txt		d:\Downloads\leonid.txt		Server\src\files\leo\galina
 		hashMap.clear();
 		arrayList.clear();
 		String flag = "";
@@ -54,7 +53,6 @@ public class ObjectStream {
 			if(filePath.isFile()){//Server\src\files\leo\leonid.txt
 				flag = Constant.FILE;
 				data = readFile(filePath);
-				//return readFile(filePath);
 			}else{//Server\src\files\leo\galina
 				flag = Constant.DIR;
 				readDir(filePath);
@@ -93,7 +91,7 @@ public class ObjectStream {
 		hashMap.put(fileName, readFile(filePath));//kefir\3.txt + byte[]
 	}
 
-	public byte[] readFile(File filePath){//Server\src\files\leo\leonid.txt
+	public byte[] readFile(File filePath){//Server\src\files\leo\leonid.txt		d:\Downloads\leonid.txt
 		int fileSize = (int) filePath.length();
 		byte[] barr = new byte[fileSize];
 		try (InputStream in = new BufferedInputStream(new FileInputStream(filePath), fileSize)) {

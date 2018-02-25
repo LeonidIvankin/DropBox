@@ -163,14 +163,18 @@ class Control {
 
 	public void listenerUpload() {//закачать файл на сервер
 		client.jbUpload.addActionListener(e -> {
-			JFileChooser fs = new JFileChooser(new File(Constant.DEFAULT_UPLOAD_DIR));
-			fs.setDialogTitle("Open a File");
-			int result = fs.showOpenDialog(null);
+			File defaultPath = new File(Constant.DEFAULT_DOWNLOAD_DIR);//путь по умолчанию
+			JFileChooser jFileChooser = new JFileChooser(defaultPath);
+			jFileChooser.setDialogTitle("Open a File");
+			jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			int result = jFileChooser.showOpenDialog(null);
 			if (result == JFileChooser.APPROVE_OPTION) {
-				File fi = fs.getSelectedFile();//выделенный файл
-				//barr = objectStream.readElement(fi);
-				Object[] uploadFile = {fi.getName(), barr};
-				workWithPacket.sendPacket(Constant.UPLOAD, uploadFile);
+				File selectedFile = jFileChooser.getSelectedFile();//выделенный файл d:\Downloads\leonid.txt	d:\Downloads\galina
+				//Object body = objectStream.readElement(selectedFile);
+				Object object = objectStream.readElement(selectedFile);
+				Object[] body = {selectedFile.getName(), object};
+
+				workWithPacket.sendPacket(Constant.UPLOAD, body);
 			}
 		});
 	}

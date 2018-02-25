@@ -167,13 +167,11 @@ public class ClientHandler {
 		workWithPacket.sendPacket(Constant.DOWNLOAD, body);
 	}
 
-	public void uploadFile(Object body) {//загрузить файл на сервер
-		Object[] uploadFile = (Object[]) body;
-		String fileName = (String) uploadFile[0];
-		barr = (byte[]) uploadFile[1];
-		filePath = new File(concatenation(dirCurrent, fileName));
-		objectStream.writeElement(barr, filePath);
-		reload(dirCurrent);
+	public void uploadFile(Object object) {//загрузить файл на сервер
+		Object[] body = (Object[]) object;
+		String elementName = (String) body [0];
+		Object data = body[1];
+		objectStream.writeElement(data, new File(dirCurrent + "\\" + elementName));
 	}
 
 	public void makeDir(String nameDir) {//создание каталога на сервере

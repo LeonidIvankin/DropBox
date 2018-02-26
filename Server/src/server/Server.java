@@ -13,13 +13,14 @@ public class Server {
 	private CopyOnWriteArrayList<ClientHandler> clients;
 	private DBService dbService;
 	public ExecutorService executorService;
+	private final BlockingQueue<Runnable> queue;
 
 
 	public Server(){
 		ServerSocket serverSocket = null;
 		Socket socket = null;
 		clients = new CopyOnWriteArrayList<>();
-		final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(100);
+		queue = new ArrayBlockingQueue<>(100);
 		executorService = new ThreadPoolExecutor(Constant.MAX_NUMBER_CLIENTS, Constant.MAX_NUMBER_CLIENTS, 0L, TimeUnit.MILLISECONDS, queue);
 
 		try {
@@ -72,6 +73,10 @@ public class Server {
 		return dbService.addData(login, pass);
 	}
 
+	public void exit(ClientHandler clientHandler){
+		clients.remove(clientHandler);
+		System.out.println(clientHandler);
+	}
 }
 
 

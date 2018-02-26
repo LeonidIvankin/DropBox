@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class ClientHandler {
 
 	private Server server = null;
-	private Socket socket = null;
+	protected Socket socket = null;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private String login;
@@ -29,7 +29,7 @@ public class ClientHandler {
 			in = new ObjectInputStream(socket.getInputStream());
 			out = new ObjectOutputStream(socket.getOutputStream());
 		} catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 
 		workWithPacket = new WorkWithPacket(out);
@@ -40,14 +40,10 @@ public class ClientHandler {
 					takePacket(in.readObject());
 				}
 			} catch (Exception e) {
-				//e.printStackTrace();
+				e.printStackTrace();
 			}
 		});
 		authorization = new Authorization(this, workWithPacket);
-	}
-
-	public Server getServer() {
-		return server;
 	}
 
 	public void checkHead(String head, Object body) {//в зависимости от head, сделать с body
@@ -82,8 +78,18 @@ public class ClientHandler {
 			case Constant.MOVE:
 				moveOnTree(body);
 				break;
+			case Constant.END:
+				System.out.println(Constant.END);
+				break;
+			case Constant.EXIT:
+				server.exit(this);
+				break;
 
 		}
+	}
+
+	public Server getServer() {
+		return server;
 	}
 
 	public String getLogin() {
@@ -124,7 +130,7 @@ public class ClientHandler {
 
 	public void createNewFile(Object body) {//создать новый файл
 		String newFileName = (String) body;
-		File newFile = new File(concatenation(dirCurrent, newFileName));
+		File newFile = new File(WorkWithString.concatenation(dirCurrent, newFileName));
 		try {
 			boolean created = newFile.createNewFile();
 			if (created){
@@ -147,16 +153,16 @@ public class ClientHandler {
 		String nameOld = (String) objects[0];
 		String nameNew = (String) objects[1];
 
-		File fileOld = new File(concatenation(dirCurrent, nameOld));
+		File fileOld = new File(WorkWithString.concatenation(dirCurrent, nameOld));
 		System.out.println(fileOld);
-		File fileNew = new File(concatenation(dirCurrent, nameNew));
+		File fileNew = new File(WorkWithString.concatenation(dirCurrent, nameNew));
 		fileOld.renameTo(fileNew);
 		reload(dirCurrent);
 	}
 
 	public void downloadFile(Object body) {//скачать файл с сервера
 		String path = (String) body;
-		File filePath = new File(concatenation(dirRootClient, path));
+		File filePath = new File(WorkWithString.concatenation(dirRootClient, path));
 		body = objectStream.readElement(filePath);
 		workWithPacket.sendPacket(Constant.DOWNLOAD, body);
 	}
@@ -170,14 +176,14 @@ public class ClientHandler {
 	}
 
 	public void makeDir(String nameDir) {//создание каталога на сервере
-		File file = new File(concatenation(dirCurrent, nameDir));
+		File file = new File(WorkWithString.concatenation(dirCurrent, nameDir));
 		file.mkdir();
 	}
 
 	public void delete(Object body) {
 		String fileName = (String) body;
 		fileName = WorkWithString.withoutBrackets(fileName);
-		File file = new File(concatenation(dirCurrent, fileName));
+		File file = new File(WorkWithString.concatenation(dirCurrent, fileName));
 		deleteDir(file);
 		reload(dirCurrent);
 	}
@@ -202,11 +208,11 @@ public class ClientHandler {
 		String dir = (String) body;
 
 		if(dir.equals("[..]")){
-			dirCurrent = separation(dirCurrent);
+			dirCurrent = WorkWithString.separation(dirCurrent);
 			reload(dirCurrent);
 		} else if(dir.charAt(0) == '[' && dir.charAt(dir.length() - 1) == ']'){
 			dir = dir.substring(1, dir.length() - 1);
-			dirCurrent = concatenation(dirCurrent, dir);
+			dirCurrent = WorkWithString.concatenation(dirCurrent, dir);
 			reload(dirCurrent);
 		}
 	}
@@ -214,7 +220,7 @@ public class ClientHandler {
 	public void loginToAccount(String login){
 		this.login = login;
 
-		dirRootClient = concatenation(Constant.SERVER_ROOT, login);
+		dirRootClient = WorkWithString.concatenation(Constant.SERVER_ROOT, login);
 		dirCurrent = dirRootClient;
 		String[] files = getListFiles(dirCurrent);
 		if (files.length != 0) {
@@ -222,17 +228,4 @@ public class ClientHandler {
 		} else sendMessage(login + ", ваша папка пока пуста");
 	}
 
-	public String concatenation(String ... strs){
-		StringBuilder stringBuilder = new StringBuilder();
-		for (int i = 0; i < strs.length; i++) {
-			stringBuilder.append(strs[i]);
-			if(i < strs.length - 1) stringBuilder.append("\\");
-		}
-		return stringBuilder.toString();
-	}
-
-	public String separation(String str){
-		int x = str.lastIndexOf("\\");
-		return str.substring(0, x);
-	}
 }

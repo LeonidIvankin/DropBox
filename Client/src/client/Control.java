@@ -10,12 +10,10 @@ import java.net.Socket;
 
 
 class Control {
-	private byte[] barr;
 	private Socket socket;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private File pathAbsoluteElementSave;
-
 	private boolean isAuthorized = false;
 
 	private Client client;
@@ -29,14 +27,9 @@ class Control {
 		workWithPacket = new WorkWithPacket(out);
 		objectStream = new ObjectStream();
 
-
-
-
-
 		//для debug
-		String[] strings = {"leo", "1111"};
-		workWithPacket.sendPacket(Constant.SIGNIN, strings);
-
+		//String[] strings = {"leo", "1111"};
+		//workWithPacket.sendPacket(Constant.SIGNIN, strings);
 
 
 		listenerSignIn();
@@ -48,6 +41,7 @@ class Control {
 		listenerMakeDir();
 		listenerRename();
 		listenerCreateNewFile();
+		listenerEnd();
 		listenerExit();
 
 		setAuthorized(false);
@@ -83,7 +77,11 @@ class Control {
 		thread.start();
 	}
 
-	public void listenerExit(){
+	public void move(String str){
+		workWithPacket.sendPacket(Constant.MOVE, str);
+	}
+
+	public void listenerEnd(){
 		client.addWindowListener(new WindowAdapter() { //отвечает за закрытие соединения при закрытии окна через крестик
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -99,8 +97,13 @@ class Control {
 		});
 	}
 
-	public void move(String str){
-		workWithPacket.sendPacket(Constant.MOVE, str);
+	public void listenerExit(){
+		client.jbExit.addActionListener(e -> {
+			workWithPacket.sendPacket(Constant.EXIT, null);
+			setAuthorized(false);
+			client.defaultListModel.clear();
+
+		});
 	}
 
 	private void listenerCreateNewFile() {

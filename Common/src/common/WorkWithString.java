@@ -2,7 +2,7 @@ package common;
 
 public class WorkWithString {
 
-	public String concatenation(String ... strs){
+	public static String concatenation(String ... strs){
 		StringBuilder stringBuilder = new StringBuilder();
 		for (int i = 0; i < strs.length; i++) {
 			stringBuilder.append(strs[i]);
@@ -11,7 +11,7 @@ public class WorkWithString {
 		return stringBuilder.toString();
 	}
 
-	public String separation(String str){
+	public static String separation(String str){
 		int x = str.lastIndexOf("\\");
 		return str.substring(0, x);
 	}

@@ -14,7 +14,6 @@ public interface Constant {
 	//System command
 	String DOWNLOAD = "/download";
 	String UPLOAD = "/upload";
-	String UPLOAD_DIR = "/uploadDir";
 	String END = "/end";
 	String FILE_LIST = "/fileList";
 	String SIGNIN = "/signIn";
@@ -29,6 +28,7 @@ public interface Constant {
 	String MOVE = "/moveOnTree";
 	String DIR = "/dir";
 	String FILE = "/file";
+	String EXIT = "/exit";
 
 	//messages to the client
 

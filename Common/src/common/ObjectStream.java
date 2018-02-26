@@ -12,7 +12,7 @@ public class ObjectStream {
 
 
 	public void writeElement(Object object, File filePath) {//D:\Downloads\leonid.txt		Server\src\files\leo\leonid.txt
-		System.out.println(filePath);
+		//System.out.println(filePath);
 		Object[] body = (Object[]) object;
 		String flag = (String) body[0];
 
@@ -22,13 +22,15 @@ public class ObjectStream {
 		}else if(flag.equals(Constant.DIR)){
 			ArrayList<String> dirs = (ArrayList<String>) body[1];
 			HashMap<String, Object> data = (HashMap<String, Object>) body[2];
-			System.out.println(filePath);
+			//System.out.println(filePath);
 			filePath.mkdir();
 			for (String dirName : dirs) {
-				new File(filePath + "\\" + dirName).mkdir();
+				//new File(filePath + "\\" + dirName).mkdir();
+				new File(WorkWithString.concatenation(filePath.toString(), dirName)).mkdir();
 			}
 			for (Map.Entry entry : data.entrySet()) {
-				writeFile((byte[]) entry.getValue(), new File(filePath  + "\\" +  entry.getKey()));
+				//writeFile((byte[]) entry.getValue(), new File(filePath  + "\\" +  entry.getKey()));
+				writeFile((byte[]) entry.getValue(), new File(WorkWithString.concatenation(filePath.toString(), entry.getKey().toString())));
 			}
 		}
 	}

@@ -71,9 +71,9 @@ public class Client extends JFrame{
 		add(rightPanel, BorderLayout.EAST);
 		add(topPanel, BorderLayout.NORTH);
 
-		UIManager.put("OptionPane.yesButtonText", "Да");
-		UIManager.put("OptionPane.noButtonText", "Нет");
-		UIManager.put("OptionPane.cancelButtonText", "Отмена");
+		UIManager.put("OptionPane.yesButtonText", "Yes");
+		UIManager.put("OptionPane.noButtonText", "No");
+		UIManager.put("OptionPane.cancelButtonText", "Cancel");
 
 		control = new Control(this);
 		mouseListenerList = new MouseListenerList(list, control);

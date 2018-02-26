@@ -23,7 +23,7 @@ public class MouseListenerList implements MouseListener {
 			if (index >= 0) {
 				Object o = list.getModel().getElementAt(index);
 				control.move(o.toString());
-				System.out.println("Double-clicked on: " + o.toString());
+				//System.out.println("Double-clicked on: " + o.toString());
 			}
 		}
 	}

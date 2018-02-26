@@ -2,7 +2,10 @@ package server;
 
 import common.*;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -99,16 +102,16 @@ public class ClientHandler {
 	public String[] getListFiles(String path) {//получение списка файлов на сервере. Сортировка каталогов и файлов
 		File folder = new File(path);
 		ArrayList<String> arrayList = new ArrayList<>();
-		if(!dirCurrent.equals(dirRootClient)){
+		if (!dirCurrent.equals(dirRootClient)) {
 			arrayList.add("[..]");
 		}
 		for (File file : folder.listFiles()) {
-			if(file.isDirectory()) {
+			if (file.isDirectory()) {
 				arrayList.add(WorkWithString.withBrackets(file.getName()));
 			}
 		}
 		for (File file : folder.listFiles()) {
-			if(file.isFile()) arrayList.add(file.getName());
+			if (file.isFile()) arrayList.add(file.getName());
 		}
 
 		return arrayList.toArray(new String[arrayList.size()]);
@@ -133,16 +136,16 @@ public class ClientHandler {
 		File newFile = new File(WorkWithString.concatenation(dirCurrent, newFileName));
 		try {
 			boolean created = newFile.createNewFile();
-			if (created){
+			if (created) {
 				reload(dirCurrent);
-				sendMessage("Создан новый файл " + newFileName);
+				//sendMessage("Создан новый файл " + newFileName);
 			}
 		} catch (IOException ex) {
 			System.out.println(ex.getMessage());
 		}
 	}
 
-	public void createNewDir(Object body){
+	public void createNewDir(Object body) {
 		String dirName = (String) body;
 		makeDir(dirName);
 		reload(dirCurrent);
@@ -169,9 +172,10 @@ public class ClientHandler {
 
 	public void uploadFile(Object object) {//загрузить файл на сервер
 		Object[] body = (Object[]) object;
-		String elementName = (String) body [0];
+		String elementName = (String) body[0];
 		Object data = body[1];
-		objectStream.writeElement(data, new File(dirCurrent + "\\" + elementName));
+		//objectStream.writeElement(data, new File(dirCurrent + "\\" + elementName));
+		objectStream.writeElement(data, new File(WorkWithString.concatenation(dirCurrent, elementName)));
 		reload(dirCurrent);
 	}
 
@@ -188,10 +192,10 @@ public class ClientHandler {
 		reload(dirCurrent);
 	}
 
-	public void deleteDir(File dir){
+	public void deleteDir(File dir) {
 		if (dir.isDirectory()) {
 			String[] children = dir.list();
-			for (int i=0; i<children.length; i++) {
+			for (int i = 0; i < children.length; i++) {
 				File f = new File(dir, children[i]);
 				deleteDir(f);
 			}
@@ -199,25 +203,25 @@ public class ClientHandler {
 		} else dir.delete();
 	}
 
-	public void reload(String path){
+	public void reload(String path) {
 		String[] files = getListFiles(path);
 		workWithPacket.sendPacket(Constant.FILE_LIST, files);
 	}
 
-	public void moveOnTree(Object body){
+	public void moveOnTree(Object body) {
 		String dir = (String) body;
 
-		if(dir.equals("[..]")){
+		if (dir.equals("[..]")) {
 			dirCurrent = WorkWithString.separation(dirCurrent);
 			reload(dirCurrent);
-		} else if(dir.charAt(0) == '[' && dir.charAt(dir.length() - 1) == ']'){
+		} else if (dir.charAt(0) == '[' && dir.charAt(dir.length() - 1) == ']') {
 			dir = dir.substring(1, dir.length() - 1);
 			dirCurrent = WorkWithString.concatenation(dirCurrent, dir);
 			reload(dirCurrent);
 		}
 	}
 
-	public void loginToAccount(String login){
+	public void loginToAccount(String login) {
 		this.login = login;
 
 		dirRootClient = WorkWithString.concatenation(Constant.SERVER_ROOT, login);

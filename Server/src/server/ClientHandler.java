@@ -13,16 +13,12 @@ public class ClientHandler {
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private String login;
-	private File filePath;
-	private File folder;
-	private byte[] barr;
 	private String dirRootClient;
 	private String dirCurrent = null;
 
 	private Authorization authorization;
 	private WorkWithPacket workWithPacket;
 	private ObjectStream objectStream;
-	private WorkWithString stringManipulation;
 
 	public ClientHandler(Socket socket, Server server) {
 		objectStream = new ObjectStream();
@@ -48,8 +44,6 @@ public class ClientHandler {
 			}
 		});
 		authorization = new Authorization(this, workWithPacket);
-		stringManipulation = new WorkWithString();
-
 	}
 
 	public Server getServer() {
@@ -97,14 +91,14 @@ public class ClientHandler {
 	}
 
 	public String[] getListFiles(String path) {//получение списка файлов на сервере. Сортировка каталогов и файлов
-		folder = new File(path);
+		File folder = new File(path);
 		ArrayList<String> arrayList = new ArrayList<>();
 		if(!dirCurrent.equals(dirRootClient)){
 			arrayList.add("[..]");
 		}
 		for (File file : folder.listFiles()) {
 			if(file.isDirectory()) {
-				arrayList.add("[" + file.getName() + "]");
+				arrayList.add(WorkWithString.withBrackets(file.getName()));
 			}
 		}
 		for (File file : folder.listFiles()) {
@@ -130,8 +124,7 @@ public class ClientHandler {
 
 	public void createNewFile(Object body) {//создать новый файл
 		String newFileName = (String) body;
-		//File newFile = new File(dirRootClient + "\\" + newFileName);
-		File newFile = new File(concatenation(dirRootClient, newFileName));
+		File newFile = new File(concatenation(dirCurrent, newFileName));
 		try {
 			boolean created = newFile.createNewFile();
 			if (created){
@@ -154,15 +147,16 @@ public class ClientHandler {
 		String nameOld = (String) objects[0];
 		String nameNew = (String) objects[1];
 
-		File fileOld = new File(concatenation(dirRootClient, nameOld));
-		File fileNew = new File(concatenation(dirRootClient, nameNew));
+		File fileOld = new File(concatenation(dirCurrent, nameOld));
+		System.out.println(fileOld);
+		File fileNew = new File(concatenation(dirCurrent, nameNew));
 		fileOld.renameTo(fileNew);
 		reload(dirCurrent);
 	}
 
 	public void downloadFile(Object body) {//скачать файл с сервера
 		String path = (String) body;
-		filePath = new File(concatenation(dirRootClient, path));//откуда файл скачать с сервера Server\src\files\leo\galina  Server\src\files\leo\leonid.txt
+		File filePath = new File(concatenation(dirRootClient, path));
 		body = objectStream.readElement(filePath);
 		workWithPacket.sendPacket(Constant.DOWNLOAD, body);
 	}
@@ -172,6 +166,7 @@ public class ClientHandler {
 		String elementName = (String) body [0];
 		Object data = body[1];
 		objectStream.writeElement(data, new File(dirCurrent + "\\" + elementName));
+		reload(dirCurrent);
 	}
 
 	public void makeDir(String nameDir) {//создание каталога на сервере
@@ -181,10 +176,21 @@ public class ClientHandler {
 
 	public void delete(Object body) {
 		String fileName = (String) body;
-		File file = new File(concatenation(dirRootClient, fileName));
-		file.delete();
+		fileName = WorkWithString.withoutBrackets(fileName);
+		File file = new File(concatenation(dirCurrent, fileName));
+		deleteDir(file);
 		reload(dirCurrent);
-		sendMessage("Файл " + fileName + " удалён");
+	}
+
+	public void deleteDir(File dir){
+		if (dir.isDirectory()) {
+			String[] children = dir.list();
+			for (int i=0; i<children.length; i++) {
+				File f = new File(dir, children[i]);
+				deleteDir(f);
+			}
+			dir.delete();
+		} else dir.delete();
 	}
 
 	public void reload(String path){

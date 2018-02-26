@@ -30,19 +30,7 @@ class Control {
 		objectStream = new ObjectStream();
 
 
-		client.addWindowListener(new WindowAdapter() { //отвечает за закрытие соединения при закрытии окна через крестик
-			@Override
-			public void windowClosing(WindowEvent e) {
-				super.windowClosing(e);
-				try {
-					out.writeObject(Constant.END);
-					socket.close();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-					setAuthorized(false);
-				}
-			}
-		});
+
 
 
 		//для debug
@@ -60,6 +48,7 @@ class Control {
 		listenerMakeDir();
 		listenerRename();
 		listenerCreateNewFile();
+		listenerExit();
 
 		setAuthorized(false);
 	}
@@ -94,6 +83,22 @@ class Control {
 		thread.start();
 	}
 
+	public void listenerExit(){
+		client.addWindowListener(new WindowAdapter() { //отвечает за закрытие соединения при закрытии окна через крестик
+			@Override
+			public void windowClosing(WindowEvent e) {
+				super.windowClosing(e);
+				try {
+					out.writeObject(Constant.END);
+					socket.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					setAuthorized(false);
+				}
+			}
+		});
+	}
+
 	public void move(String str){
 		workWithPacket.sendPacket(Constant.MOVE, str);
 	}
@@ -114,13 +119,16 @@ class Control {
 
 	private void listenerRename() {//переименование
 		client.jbRename.addActionListener(e -> {
-			if ((client.list.getSelectedValue()) != null) {
-				String nameOld = client.list.getSelectedValue().toString();
+			Object selectedElement;
+			if ((selectedElement = client.list.getSelectedValue()) != null) {
+				String nameOld = selectedElement.toString();
+				nameOld = WorkWithString.withoutBrackets(nameOld);
 				String nameNew = (String) JOptionPane.showInputDialog(client,
 						"Введите новое имя",
 						"Переименование",
 						JOptionPane.QUESTION_MESSAGE,
 						null, null, nameOld);
+				System.out.println(nameNew);
 				if(nameNew != null){
 					String[] body = {nameOld, nameNew};
 					workWithPacket.sendPacket(Constant.RENAME, body);

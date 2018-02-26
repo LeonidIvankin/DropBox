@@ -6,10 +6,6 @@ public class DBService {
 	private Connection connection;
 	private Statement statement;
 
-	private void addData() throws SQLException {
-		statement.executeUpdate("INSERT INTO users (login, pass) VALUES ('leo', '1234')");
-	}
-
 	public boolean addData(String login, String pass){
 
 		try {

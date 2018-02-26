@@ -23,6 +23,13 @@ public class WorkWithString {
 		return str;
 	}
 
+	public static String withBrackets(String str){
+		if(str.charAt(0) != '['){
+			return "[" + str + "]";
+		}
+		return str;
+	}
+
 	public static String findReletivePath(String dir, String file){
 		int x = dir.length();
 		return file.substring(x + 1, file.length());

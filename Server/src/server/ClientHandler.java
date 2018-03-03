@@ -13,7 +13,6 @@ public class ClientHandler {
 
 	private Server server = null;
 	protected Socket socket = null;
-	//private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private String login;
 	private String dirRootClient;

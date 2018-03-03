@@ -2,34 +2,25 @@ package client;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.*;
-import java.net.Socket;
 
 public class Client extends JFrame{
-	private final int PORT = 8888;
-	private final String SERVER_IP = "localhost";
-	private JList list;
+	protected JList list;
 	private JTextArea jtaUsers;
 	private JScrollPane jScrollPane;
-	private JTextField jTextField;
-	private JTextField jtfLogin;
-	private JPasswordField jtfPassword;
-	private JPanel bottomPanel, topPanel, rightPanel;
-	private Socket socket;
-	private JButton jButtonAdd, jButtonDelete, jbAuth;
-	private ObjectInputStream in;
-	private ObjectOutputStream out;
-	private boolean isAuthorized;
-	private DefaultListModel defaultListModel;
+
+	protected JTextField jtfLogin;
+	protected JPasswordField jtfPassword;
+	protected JPanel topPanel, rightPanel;
+	protected JButton jbCreateNewDir, jbDelete, jbSignIn, jbSignUp, jbUpload, jbDownload, jbExit, jbReload, jbRename, jbCreateNewFile;
+	protected DefaultListModel defaultListModel;
+
+	private Control control;
+	private MouseListenerList mouseListenerList;
 
 
 
 	public Client(){
-		setTitle("Client");
+		setTitle("DropBox");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(400, 400);
 		setLocationRelativeTo(null);
@@ -44,160 +35,48 @@ public class Client extends JFrame{
 		jScrollPane = new JScrollPane(list);
 		jScrollPane.setPreferredSize(new Dimension(200, 200));
 
-		jTextField = new JTextField(); //окно для ввода текста
-		jTextField.setPreferredSize(new Dimension(200, 20));
-		bottomPanel = new JPanel();
-		rightPanel = new JPanel(new GridLayout(3, 1));
+		rightPanel = new JPanel(new GridLayout(8, 1));
 
+		jbSignIn = new JButton("SignIn");
+		jbSignUp = new JButton("SignUp");
 
-		jButtonAdd = new JButton("Add");
-		jButtonDelete = new JButton("Delete");
+		jbUpload = new JButton("Upload");
+		jbDownload = new JButton("Download");
+		jbCreateNewDir = new JButton("New dir");
+		jbCreateNewFile = new JButton("New File");
+		jbDelete = new JButton("Delete");
+		jbReload = new JButton("Reload");
+		jbRename = new JButton("Rename");
+		jbExit = new JButton("Exit");
 
-
-		bottomPanel.add(jTextField, BorderLayout.CENTER);
-		rightPanel.add(jButtonAdd);
-		rightPanel.add(jButtonDelete);
+		rightPanel.add(jbUpload);
+		rightPanel.add(jbDownload);
+		rightPanel.add(jbCreateNewDir);
+		rightPanel.add(jbCreateNewFile);
+		rightPanel.add(jbDelete);
+		rightPanel.add(jbReload);
+		rightPanel.add(jbRename);
+		rightPanel.add(jbExit);
 
 		jtfLogin = new JTextField();
 		jtfPassword = new JPasswordField();
-		jbAuth = new JButton("Login");
+
 		topPanel = new JPanel(new GridLayout(1,3));
 		topPanel.add(jtfLogin);
 		topPanel.add(jtfPassword);
-		topPanel.add(jbAuth);
-
-
+		topPanel.add(jbSignIn);
+		topPanel.add(jbSignUp);
 
 		add(jScrollPane, BorderLayout.CENTER);
-		add(bottomPanel, BorderLayout.SOUTH);
 		add(rightPanel, BorderLayout.EAST);
 		add(topPanel, BorderLayout.NORTH);
 
-		//LISTNERS
-		jButtonAdd.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				sendMessage();
-			}
-		});
-		jTextField.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				sendMessage();
-			}
-		});
-		jbAuth.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				auth();
-			}
-		});
-		addWindowListener(new WindowAdapter() { //отвечает за закрытие соединения при закрытии окна через крестик
-			@Override
-			public void windowClosing(WindowEvent e){
-				super.windowClosing(e);
-				try{
-					out.writeObject("/end");
-					socket.close();
-				}catch(IOException e1){
-					e1.printStackTrace();
-					setAuthorized(false);
-				}
-			}
-		});
-		start();
-		setAuthorized(false);
+		UIManager.put("OptionPane.yesButtonText", "Yes");
+		UIManager.put("OptionPane.noButtonText", "No");
+		UIManager.put("OptionPane.cancelButtonText", "Cancel");
 
-
+		control = new Control(this);
+		mouseListenerList = new MouseListenerList(list, control);
 		setVisible(true);
-	}
-
-	public void start(){
-		try{
-			socket = new Socket(SERVER_IP, PORT);
-			out = new ObjectOutputStream(socket.getOutputStream());
-			in = new ObjectInputStream(socket.getInputStream());
-		}catch(IOException e){
-			e.printStackTrace();
-		}
-		Thread thread1 = new Thread(new Runnable() {
-			@Override
-			public void run(){
-				try{
-					while(true){
-						Object answer = in.readObject();
-						if (answer instanceof String){
-							String msg = (String) answer;
-							if(msg.startsWith("/authok")){
-								setAuthorized(true);
-								break;
-							}
-						}
-					}
-					while(true){
-						Object answer = in.readObject();
-						if (answer instanceof String){
-							String msg = (String) answer;
-						}else if(answer instanceof String[]){
-							String[] files = (String[]) answer;
-							for (String fileName : files) {
-								System.out.println(fileName);
-								defaultListModel.addElement(fileName);
-							}
-						}
-					}
-				}catch(IOException e){
-					e.printStackTrace();
-					setAuthorized(false);
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}finally{
-					try{
-						socket.close();
-					}catch(IOException e){
-						e.printStackTrace();
-					}
-				}
-			}
-		});
-		thread1.start();
-	}
-
-	public void setAuthorized(boolean authorized){ //скрываем панели для авторизованых и неавторизованых пользователей
-		isAuthorized = authorized;
-		topPanel.setVisible(!isAuthorized);
-		bottomPanel.setVisible(isAuthorized);
-		rightPanel.setVisible(isAuthorized);
-	}
-
-	public void auth(){
-		if(socket == null || socket.isClosed()) start();
-		try{
-			out.writeObject("/auth " + jtfLogin.getText() + " " + jtfPassword.getText());
-			jtfLogin.setText("");
-			jtfPassword.setText("");
-		}catch(IOException e){
-			e.printStackTrace();
-		}
-	}
-
-	public void sendSystemMessage(String msg){
-		try{
-			out.writeObject(msg);
-			out.flush();
-		}catch(IOException e){
-			e.printStackTrace();
-		}
-	}
-
-	public void sendMessage(){
-		String msg = jTextField.getText();
-		jTextField.setText("");
-		try{
-			out.writeObject(msg);
-			out.flush();
-		}catch(IOException e){
-			e.printStackTrace();
-		}
 	}
 }

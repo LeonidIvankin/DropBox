@@ -1,11 +1,18 @@
 
 package client;
 
-import common.*;
+import common.Constant;
+import common.ReadAndWriteElement;
+import common.WorkWithPacket;
+import common.WorkWithString;
 
 import javax.swing.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 
@@ -18,14 +25,15 @@ class Control {
 
 	private Client client;
 	private WorkWithPacket workWithPacket;
-	private ObjectStream objectStream;
+	private ReadAndWriteElement readAndWriteElement;
+	private boolean isConnect = true;
 
 
 	public Control(Client client) {
 		start();
 		this.client = client;
 		workWithPacket = new WorkWithPacket(out);
-		objectStream = new ObjectStream();
+		readAndWriteElement = new ReadAndWriteElement();
 
 		//для debug
 		String[] strings = {"leo", "1111"};
@@ -51,53 +59,39 @@ class Control {
 		try {
 			socket = new Socket(Constant.SERVER_IP, Constant.PORT);
 			out = new ObjectOutputStream(socket.getOutputStream());
-			in = new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Thread thread = new Thread(() -> {
-			try {
-				while (true) {
+		new Thread(() -> {
+			try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+				while (isConnect) {
 					takePacket(in.readObject());
 				}
-
+				System.out.println(isConnect);
 			} catch (IOException e) {
 				e.printStackTrace();
-				setAuthorized(false);
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
-			} finally {
-				try {
-					socket.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 			}
-		});
-		thread.start();
+		}).start();
 	}
 
-	public void move(String str){
+	public void move(String str) {
 		workWithPacket.sendPacket(Constant.MOVE, str);
 	}
 
-	public void listenerEnd(){
+	public void listenerEnd() {
 		client.addWindowListener(new WindowAdapter() { //отвечает за закрытие соединения при закрытии окна через крестик
 			@Override
 			public void windowClosing(WindowEvent e) {
 				super.windowClosing(e);
-				try {
-					out.writeObject(Constant.END);
-					socket.close();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-					setAuthorized(false);
-				}
+				isConnect = false;
+				workWithPacket.sendPacket(Constant.END, null);
 			}
 		});
 	}
 
-	public void listenerExit(){
+	public void listenerExit() {
 		client.jbExit.addActionListener(e -> {
 			workWithPacket.sendPacket(Constant.EXIT, null);
 			setAuthorized(false);
@@ -107,14 +101,14 @@ class Control {
 	}
 
 	private void listenerCreateNewFile() {
-		client.jbCreateNewFile.addActionListener(e ->{
+		client.jbCreateNewFile.addActionListener(e -> {
 			String nameNewFile = (String) JOptionPane.showInputDialog(client,
 					"Введите имя нового файла",
 					"Создание нового файла",
 					JOptionPane.QUESTION_MESSAGE,
 					null, null, "NewFile.txt");
 
-			if(nameNewFile != null){
+			if (nameNewFile != null) {
 				workWithPacket.sendPacket(Constant.NEW_FILE, nameNewFile);
 			}
 		});
@@ -132,7 +126,7 @@ class Control {
 						JOptionPane.QUESTION_MESSAGE,
 						null, null, nameOld);
 				System.out.println(nameNew);
-				if(nameNew != null){
+				if (nameNew != null) {
 					String[] body = {nameOld, nameNew};
 					workWithPacket.sendPacket(Constant.RENAME, body);
 				}
@@ -146,7 +140,7 @@ class Control {
 					new String[]{"Введите наименование каталога"},
 					"Создание нового каталога",
 					JOptionPane.WARNING_MESSAGE);
-			if(str != null){
+			if (str != null) {
 				workWithPacket.sendPacket(Constant.MAKE_DIR, str);
 			}
 		});
@@ -155,7 +149,7 @@ class Control {
 	public void listenerDownload() {//скачать файл с сервера
 		client.jbDownload.addActionListener(e -> {
 			Object elementSelected;
-			if((elementSelected = client.list.getSelectedValue()) != null){//выделенный элемент в листе
+			if ((elementSelected = client.list.getSelectedValue()) != null) {//выделенный элемент в листе
 				String elementSelectedString = elementSelected.toString();//наименование файла по умолчанию leonid.txt [galina]
 				elementSelectedString = WorkWithString.withoutBrackets(elementSelectedString);//наименование файла по умолчанию leonid.txt galina
 				File defaultPath = new File(Constant.DEFAULT_DOWNLOAD_DIR);//путь по умолчанию
@@ -181,8 +175,8 @@ class Control {
 			int result = jFileChooser.showOpenDialog(null);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = jFileChooser.getSelectedFile();//выделенный файл d:\Downloads\leonid.txt	d:\Downloads\galina
-				//Object body = objectStream.readElement(selectedFile);
-				Object object = objectStream.readElement(selectedFile);
+				//Object body = readAndWriteElement.readElement(selectedFile);
+				Object object = readAndWriteElement.readElement(selectedFile);
 				Object[] body = {selectedFile.getName(), object};
 
 				workWithPacket.sendPacket(Constant.UPLOAD, body);
@@ -277,6 +271,6 @@ class Control {
 	}
 
 	public void downloadFile(Object body) {
-		objectStream.writeElement(body, pathAbsoluteElementSave);
+		readAndWriteElement.writeElement(body, pathAbsoluteElementSave);
 	}
 }

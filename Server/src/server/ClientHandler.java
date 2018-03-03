@@ -13,23 +13,25 @@ public class ClientHandler {
 
 	private Server server = null;
 	protected Socket socket = null;
-	private ObjectInputStream in;
+	//private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private String login;
 	private String dirRootClient;
 	private String dirCurrent = null;
+	private boolean isConnect = true;
 
 	private Authorization authorization;
 	private WorkWithPacket workWithPacket;
-	private ObjectStream objectStream;
+	private ReadAndWriteElement readAndWriteElement;
 
 	public ClientHandler(Socket socket, Server server) {
-		objectStream = new ObjectStream();
+		readAndWriteElement = new ReadAndWriteElement();
+
 		try {
 			this.server = server;
 			this.socket = socket;
 			login = "undefined";
-			in = new ObjectInputStream(socket.getInputStream());
+
 			out = new ObjectOutputStream(socket.getOutputStream());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -38,8 +40,9 @@ public class ClientHandler {
 		workWithPacket = new WorkWithPacket(out);
 
 		server.executorService.submit(() -> {
-			try {
-				while (true) {
+
+			try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+				while (isConnect) {
 					takePacket(in.readObject());
 				}
 			} catch (Exception e) {
@@ -82,13 +85,18 @@ public class ClientHandler {
 				moveOnTree(body);
 				break;
 			case Constant.END:
-				System.out.println(Constant.END);
+				end();
 				break;
 			case Constant.EXIT:
 				server.exit(this);
 				break;
 
 		}
+	}
+
+	private void end() {
+		isConnect = false;
+		server.exit(this);
 	}
 
 	public Server getServer() {
@@ -166,7 +174,7 @@ public class ClientHandler {
 	public void downloadFile(Object body) {//скачать файл с сервера
 		String path = (String) body;
 		File filePath = new File(WorkWithString.concatenation(dirRootClient, path));
-		body = objectStream.readElement(filePath);
+		body = readAndWriteElement.readElement(filePath);
 		workWithPacket.sendPacket(Constant.DOWNLOAD, body);
 	}
 
@@ -174,8 +182,8 @@ public class ClientHandler {
 		Object[] body = (Object[]) object;
 		String elementName = (String) body[0];
 		Object data = body[1];
-		//objectStream.writeElement(data, new File(dirCurrent + "\\" + elementName));
-		objectStream.writeElement(data, new File(WorkWithString.concatenation(dirCurrent, elementName)));
+		//readAndWriteElement.writeElement(data, new File(dirCurrent + "\\" + elementName));
+		readAndWriteElement.writeElement(data, new File(WorkWithString.concatenation(dirCurrent, elementName)));
 		reload(dirCurrent);
 	}
 

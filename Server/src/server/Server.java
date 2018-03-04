@@ -32,11 +32,11 @@ public class Server {
 			dbService.connect();
 
 
-			System.out.println("Сервер запущен, ждем клиентов");
+			System.out.println(Constant.SERVER_IS_RUNNING);
 			while (true) {
 				socket = serverSocket.accept();
 				clients.add(new ClientHandler(socket, this));
-				System.out.println("Клиент подключился");
+				System.out.println(Constant.CLIENT_CONNECTED);
 			}
 
 		} catch (ClassNotFoundException e) {
@@ -77,7 +77,7 @@ public class Server {
 
 	public void exit(ClientHandler clientHandler) {
 		clients.remove(clientHandler);
-		System.out.println("Клиент отключился");
+		System.out.println(Constant.CLIENT_DISCONNECTED);
 	}
 }
 

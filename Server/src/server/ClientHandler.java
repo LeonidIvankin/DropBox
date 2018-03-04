@@ -110,7 +110,7 @@ public class ClientHandler {
 		File folder = new File(path);
 		ArrayList<String> arrayList = new ArrayList<>();
 		if (!dirCurrent.equals(dirRootClient)) {
-			arrayList.add("[..]");
+			arrayList.add(Constant.ROOT_DIR);
 		}
 		for (File file : folder.listFiles()) {
 			if (file.isDirectory()) {
@@ -154,7 +154,7 @@ public class ClientHandler {
 		String newFileName = (String) body;
 		if(!isFreeName(newFileName)) {
 			newFileName = WorkWithString.prefixBusyName(newFileName, getListElements(dirCurrent));//если имя не свободно добавляем (1)
-			sendMessage("Добавлен файл: " + newFileName);
+			sendMessage(Constant.ADD_FILE + newFileName);
 		}
 		File newFile = new File(WorkWithString.concatenation(dirCurrent, newFileName));
 		try {
@@ -171,7 +171,7 @@ public class ClientHandler {
 		String dirName = (String) body;
 		if(!isFreeName(dirName)){
 			dirName = WorkWithString.prefixBusyName(dirName, getListElements(dirCurrent));//если имя не свободно добавляем (1)
-			sendMessage("Добавлен каталог: " + dirName);
+			sendMessage(Constant.ADD_DIR + dirName);
 		}
 		makeDir(dirName);
 		reload(dirCurrent);
@@ -183,7 +183,7 @@ public class ClientHandler {
 		String nameNew = (String) objects[1];
 		if(!isFreeName(nameNew)){
 			nameNew = WorkWithString.prefixBusyName(nameNew, getListElements(dirCurrent));//если имя не свободно добавляем (1)
-			sendMessage("Новое имя: " + nameNew);
+			sendMessage(Constant.NEW_NAME + nameNew);
 		}
 
 		File fileOld = new File(WorkWithString.concatenation(dirCurrent, nameOld));
@@ -205,7 +205,7 @@ public class ClientHandler {
 
 		if(!isFreeName(elementName)){
 			elementName = WorkWithString.prefixBusyName(elementName, getListElements(dirCurrent));//если имя не свободно добавляем (1)
-			sendMessage("Имя изменено на: " + elementName);
+			sendMessage(Constant.NAME_CHANGED_TO + elementName);
 		}
 		Object data = body[1];
 		readAndWriteElement.writeElement(data, new File(WorkWithString.concatenation(dirCurrent, elementName)));
@@ -244,10 +244,10 @@ public class ClientHandler {
 	public void moveOnTree(Object body) {
 		String dir = (String) body;
 
-		if (dir.equals("[..]")) {
+		if (dir.equals(Constant.ROOT_DIR)) {
 			dirCurrent = WorkWithString.separation(dirCurrent);
 			reload(dirCurrent);
-		} else if (dir.charAt(0) == '[' && dir.charAt(dir.length() - 1) == ']') {
+		} else if (dir.charAt(0) == Constant.OPEN_BRACKET && dir.charAt(dir.length() - 1) == Constant.CLOSE_BRACKET) {
 			dir = dir.substring(1, dir.length() - 1);
 			dirCurrent = WorkWithString.concatenation(dirCurrent, dir);
 			reload(dirCurrent);
@@ -262,7 +262,7 @@ public class ClientHandler {
 		String[] files = getListSortedElements(dirCurrent);
 		if (files.length != 0) {
 			reload(dirCurrent);
-		} else sendMessage(login + ", ваша папка пока пуста");
+		} else sendMessage(login + Constant.YOUR_FOLDER_IS_EMPTY);
 	}
 
 

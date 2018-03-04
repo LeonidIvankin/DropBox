@@ -31,8 +31,8 @@ class Control {
 
 
 	public Control(Client client) {
-		start();
 		this.client = client;
+		start();
 		workWithPacket = new WorkWithPacket(out);
 		readAndWriteElement = new ReadAndWriteElement();
 
@@ -104,10 +104,10 @@ class Control {
 	private void listenerCreateNewFile() {
 		client.jbCreateNewFile.addActionListener(e -> {
 			String nameNewFile = (String) JOptionPane.showInputDialog(client,
-					"Введите имя нового файла",
-					"Создание нового файла",
+					Constant.ENTER_NAME_NEW_FILE ,
+					Constant.CREATE_NEW_FILE,
 					JOptionPane.QUESTION_MESSAGE,
-					null, null, "NewFile.txt");
+					null, null, Constant.DEFAULT_NAME_NEW_FILE);
 
 			if (nameNewFile != null) {
 				workWithPacket.sendPacket(Constant.NEW_FILE, nameNewFile);
@@ -122,8 +122,8 @@ class Control {
 				String nameOld = selectedElement.toString();
 				nameOld = WorkWithString.withoutBrackets(nameOld);
 				String nameNew = (String) JOptionPane.showInputDialog(client,
-						"Введите новое имя",
-						"Переименование",
+						Constant.ENTER_NEW_NAME,
+						Constant.TITLE_RENAME,
 						JOptionPane.QUESTION_MESSAGE,
 						null, null, nameOld);
 				System.out.println(nameNew);
@@ -138,8 +138,8 @@ class Control {
 	private void listenerMakeDir() {//создание каталога
 		client.jbCreateNewDir.addActionListener(e -> {
 			String str = JOptionPane.showInputDialog(client,
-					new String[]{"Введите наименование каталога"},
-					"Создание нового каталога",
+					new String[]{Constant.ENTER_NAME_NEW_DIR},
+					Constant.CREATE_NEW_DIR,
 					JOptionPane.WARNING_MESSAGE);
 			if (str != null) {
 				workWithPacket.sendPacket(Constant.MAKE_DIR, str);
@@ -151,12 +151,13 @@ class Control {
 		client.jbDownload.addActionListener(e -> {
 			Object elementSelected;
 			if ((elementSelected = client.list.getSelectedValue()) != null) {//выделенный элемент в листе
-				String elementSelectedString = elementSelected.toString();//наименование файла по умолчанию
-				elementSelectedString = WorkWithString.withoutBrackets(elementSelectedString);//наименование файла по умолчанию
 				File defaultPath = new File(Constant.DEFAULT_DOWNLOAD_DIR);//путь по умолчанию
 				JFileChooser jFileChooser = new JFileChooser(defaultPath);
+
+				String elementSelectedString = elementSelected.toString();//наименование файла по умолчанию
+				elementSelectedString = WorkWithString.withoutBrackets(elementSelectedString);//наименование файла по умолчанию
 				jFileChooser.setSelectedFile(new File(elementSelectedString));
-				jFileChooser.setDialogTitle("Save a File");
+				jFileChooser.setDialogTitle(Constant.TITLE_SAVE_FILE);
 				int result = jFileChooser.showSaveDialog(null);
 				if (result == JFileChooser.APPROVE_OPTION) {
 					pathAbsoluteElementSave = jFileChooser.getSelectedFile();//куда сохранять
@@ -171,7 +172,7 @@ class Control {
 		client.jbUpload.addActionListener(e -> {
 			File defaultPath = new File(Constant.DEFAULT_DOWNLOAD_DIR);//путь по умолчанию
 			JFileChooser jFileChooser = new JFileChooser(defaultPath);
-			jFileChooser.setDialogTitle("Open a File");
+			jFileChooser.setDialogTitle(Constant.TITLE_OPEN_FILE);
 			jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 			int result = jFileChooser.showOpenDialog(null);
 			if (result == JFileChooser.APPROVE_OPTION) {
@@ -213,8 +214,8 @@ class Control {
 			List elementSelectedList;
 			if ((elementSelectedList = client.list.getSelectedValuesList()) != null) {
 				int result = JOptionPane.showConfirmDialog(client,
-						"Вы уверены",
-						"Окно подтверждения",
+						Constant.ARE_YOU_SURE,
+						Constant.TITLE_CONFIRMATION_WINDOW,
 						JOptionPane.YES_NO_CANCEL_OPTION,
 						JOptionPane.WARNING_MESSAGE);
 				if (result == 0) {

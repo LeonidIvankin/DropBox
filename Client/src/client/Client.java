@@ -1,12 +1,12 @@
 package client;
 
+import common.Constant;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Client extends JFrame{
 	protected JList list;
-	private JTextArea jtaUsers;
-	private JScrollPane jScrollPane;
 
 	protected JTextField jtfLogin;
 	protected JPasswordField jtfPassword;
@@ -14,13 +14,9 @@ public class Client extends JFrame{
 	protected JButton jbCreateNewDir, jbDelete, jbSignIn, jbSignUp, jbUpload, jbDownload, jbExit, jbReload, jbRename, jbCreateNewFile;
 	protected DefaultListModel defaultListModel;
 
-	private Control control;
-	private MouseListenerList mouseListenerList;
-
-
 
 	public Client(){
-		setTitle("DropBox");
+		setTitle(Constant.APPLICATION_NAME);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(400, 400);
 		setLocationRelativeTo(null);
@@ -29,25 +25,25 @@ public class Client extends JFrame{
 
 		list = new JList(defaultListModel);
 		list.setLayoutOrientation(JList.VERTICAL);
-		jtaUsers = new JTextArea();
+		JTextArea jtaUsers = new JTextArea();
 		jtaUsers.setEditable(false);
 		jtaUsers.setPreferredSize(new Dimension(150, 1));
-		jScrollPane = new JScrollPane(list);
+		JScrollPane jScrollPane = new JScrollPane(list);
 		jScrollPane.setPreferredSize(new Dimension(200, 200));
 
 		rightPanel = new JPanel(new GridLayout(8, 1));
 
-		jbSignIn = new JButton("SignIn");
-		jbSignUp = new JButton("SignUp");
+		jbSignIn = new JButton(Constant.BUTTON_NAME_SIGNIN);
+		jbSignUp = new JButton(Constant.BUTTON_NAME_SIGNUP);
 
-		jbUpload = new JButton("Upload");
-		jbDownload = new JButton("Download");
-		jbCreateNewDir = new JButton("New dir");
-		jbCreateNewFile = new JButton("New File");
-		jbDelete = new JButton("Delete");
-		jbReload = new JButton("Reload");
-		jbRename = new JButton("Rename");
-		jbExit = new JButton("Exit");
+		jbUpload = new JButton(Constant.BUTTON_NAME_UPLOAD);
+		jbDownload = new JButton(Constant.BUTTON_NAME_DOWNLOAD);
+		jbCreateNewDir = new JButton(Constant.BUTTON_NAME_NEW_DIR);
+		jbCreateNewFile = new JButton(Constant.BUTTON_NAME_NEW_FILE);
+		jbDelete = new JButton(Constant.BUTTON_NAME_DELETE);
+		jbReload = new JButton(Constant.BUTTON_NAME_RELOAD);
+		jbRename = new JButton(Constant.BUTTON_NAME_RENAME);
+		jbExit = new JButton(Constant.BUTTON_NAME_EXIT);
 
 		rightPanel.add(jbUpload);
 		rightPanel.add(jbDownload);
@@ -71,12 +67,12 @@ public class Client extends JFrame{
 		add(rightPanel, BorderLayout.EAST);
 		add(topPanel, BorderLayout.NORTH);
 
-		UIManager.put("OptionPane.yesButtonText", "Yes");
-		UIManager.put("OptionPane.noButtonText", "No");
-		UIManager.put("OptionPane.cancelButtonText", "Cancel");
+		UIManager.put("OptionPane.yesButtonText", Constant.COMMAND_NAME_YES);
+		UIManager.put("OptionPane.noButtonText", Constant.COMMAND_NAME_NO);
+		UIManager.put("OptionPane.cancelButtonText", Constant.COMMAND_NAME_CANCEL);
 
-		control = new Control(this);
-		mouseListenerList = new MouseListenerList(list, control);
+		Control control = new Control(this);
+		MouseListenerList mouseListenerList = new MouseListenerList(list, control);
 		setVisible(true);
 	}
 }

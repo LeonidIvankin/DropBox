@@ -28,8 +28,8 @@ public class Authorization {
 				clientHandler.loginToAccount(login);
 				isAuthorized = true;
 
-			} else sendMessage("Учетная запись уже используется");
-		} else sendMessage("Не верные логин/пароль");
+			} else sendMessage(Constant.ACCOUNT_IS_USED);
+		} else sendMessage(Constant.INVALID_LOGIN_AND_PASSWORD);
 	}
 
 	public void signUp(Object body) {//регистрация
@@ -39,18 +39,18 @@ public class Authorization {
 
 		boolean loginIsReserved = server.checkLogin(login);
 		if (login.equals("") && pass.equals("")) {
-			sendMessage("Введите логин и пароль и повторите");
+			sendMessage(Constant.ENTER_YOUR_LOGIN_AND_PASSWORD_AND_REPEAT);
 		} else if (login.equals("")) {
-			sendMessage("Введите логин");
+			sendMessage(Constant.ENTER_LOGIN);
 		} else {
 			if (loginIsReserved) {
-				sendMessage("Логин занят");
+				sendMessage(Constant.LOGIN_BUSY);
 			} else if (pass.equals("")) {
-				sendMessage("Логин свободен. Введите пароль и повторите");
+				sendMessage(Constant.LOGIN_IS_FREE);
 			} else {
 				System.out.println(server.setLoginAndPass(login, pass));
 				clientHandler.makeDir(login);
-				sendMessage("Вы успешно зарегистрированы");
+				sendMessage(Constant.YOU_HAVE_SUCCESSFULLY_REGISTERED);
 				signIn(body);
 			}
 		}

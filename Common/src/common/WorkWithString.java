@@ -48,15 +48,15 @@ public class WorkWithString {
 	}
 
 	public static String withoutBrackets(String str) {
-		if (str.charAt(0) == '[' && str.charAt(str.length() - 1) == ']') {
+		if (str.charAt(0) == Constant.OPEN_BRACKET && str.charAt(str.length() - 1) == Constant.CLOSE_BRACKET) {
 			str = str.substring(1, str.length() - 1);
 		}
 		return str;
 	}
 
 	public static String withBrackets(String str) {
-		if (str.charAt(0) != '[') {
-			return "[" + str + "]";
+		if (str.charAt(0) != Constant.OPEN_BRACKET) {
+			return Constant.OPEN_BRACKET + str + Constant.CLOSE_BRACKET;
 		}
 		return str;
 	}

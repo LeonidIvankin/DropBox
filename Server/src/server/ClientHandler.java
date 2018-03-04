@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ClientHandler {
 
@@ -154,16 +155,17 @@ public class ClientHandler {
 		String newFileName = (String) body;
 		if(!isFreeName(newFileName)) {
 			newFileName = WorkWithString.prefixBusyName(newFileName, getListElements(dirCurrent));//если имя не свободно добавляем (1)
-			sendMessage(Constant.ADD_FILE + newFileName);
+			//sendMessage(Constant.ADD_FILE + newFileName);
+			sendMessage(String.format(Locale.getDefault(), "%s%s", Constant.ADD_FILE, newFileName));
 		}
-		File newFile = new File(WorkWithString.concatenation(dirCurrent, newFileName));
+		File newFile = new File(WorkWithString.concatenationPath(dirCurrent, newFileName));
 		try {
 			boolean created = newFile.createNewFile();
 			if (created) {
 				reload(dirCurrent);
 			}
 		} catch (IOException ex) {
-			System.out.println(ex.getMessage());
+			ex.printStackTrace();
 		}
 	}
 
@@ -183,18 +185,19 @@ public class ClientHandler {
 		String nameNew = (String) objects[1];
 		if(!isFreeName(nameNew)){
 			nameNew = WorkWithString.prefixBusyName(nameNew, getListElements(dirCurrent));//если имя не свободно добавляем (1)
-			sendMessage(Constant.NEW_NAME + nameNew);
+			//sendMessage(Constant.NEW_NAME + nameNew);
+			sendMessage(String.format(Locale.getDefault(), "%s%s", Constant.NEW_NAME, nameNew));
 		}
 
-		File fileOld = new File(WorkWithString.concatenation(dirCurrent, nameOld));
-		File fileNew = new File(WorkWithString.concatenation(dirCurrent, nameNew));
+		File fileOld = new File(WorkWithString.concatenationPath(dirCurrent, nameOld));
+		File fileNew = new File(WorkWithString.concatenationPath(dirCurrent, nameNew));
 		fileOld.renameTo(fileNew);
 		reload(dirCurrent);
 	}
 
 	public void downloadFile(Object body) {//скачать файл с сервера
 		String path = (String) body;
-		File filePath = new File(WorkWithString.concatenation(dirRootClient, path));
+		File filePath = new File(WorkWithString.concatenationPath(dirRootClient, path));
 		body = readAndWriteElement.readElement(filePath);
 		workWithPacket.sendPacket(Constant.DOWNLOAD, body);
 	}
@@ -205,22 +208,23 @@ public class ClientHandler {
 
 		if(!isFreeName(elementName)){
 			elementName = WorkWithString.prefixBusyName(elementName, getListElements(dirCurrent));//если имя не свободно добавляем (1)
-			sendMessage(Constant.NAME_CHANGED_TO + elementName);
+			//sendMessage(Constant.NAME_CHANGED_TO + elementName);
+			sendMessage(String.format(Locale.getDefault(), "%s%s", Constant.NAME_CHANGED_TO, elementName));
 		}
 		Object data = body[1];
-		readAndWriteElement.writeElement(data, new File(WorkWithString.concatenation(dirCurrent, elementName)));
+		readAndWriteElement.writeElement(data, new File(WorkWithString.concatenationPath(dirCurrent, elementName)));
 		reload(dirCurrent);
 	}
 
 	public void makeDir(String nameDir) {//создание каталога на сервере
-		File file = new File(WorkWithString.concatenation(dirCurrent, nameDir));
+		File file = new File(WorkWithString.concatenationPath(dirCurrent, nameDir));
 		file.mkdir();
 	}
 
 	public void delete(Object body) {
 		String fileName = (String) body;
 		fileName = WorkWithString.withoutBrackets(fileName);
-		File file = new File(WorkWithString.concatenation(dirCurrent, fileName));
+		File file = new File(WorkWithString.concatenationPath(dirCurrent, fileName));
 		deleteDir(file);
 		reload(dirCurrent);
 	}
@@ -249,7 +253,7 @@ public class ClientHandler {
 			reload(dirCurrent);
 		} else if (dir.charAt(0) == Constant.OPEN_BRACKET && dir.charAt(dir.length() - 1) == Constant.CLOSE_BRACKET) {
 			dir = dir.substring(1, dir.length() - 1);
-			dirCurrent = WorkWithString.concatenation(dirCurrent, dir);
+			dirCurrent = WorkWithString.concatenationPath(dirCurrent, dir);
 			reload(dirCurrent);
 		}
 	}
@@ -257,14 +261,12 @@ public class ClientHandler {
 	public void loginToAccount(String login) {
 		this.login = login;
 
-		dirRootClient = WorkWithString.concatenation(Constant.SERVER_ROOT, login);
+		dirRootClient = WorkWithString.concatenationPath(Constant.SERVER_ROOT, login);
 		dirCurrent = dirRootClient;
 		String[] files = getListSortedElements(dirCurrent);
 		if (files.length != 0) {
 			reload(dirCurrent);
-		} else sendMessage(login + Constant.YOUR_FOLDER_IS_EMPTY);
+		//} else sendMessage(login + Constant.YOUR_FOLDER_IS_EMPTY);
+		} else sendMessage(String.format(Locale.getDefault(), "%s%s", login, Constant.YOUR_FOLDER_IS_EMPTY));
 	}
-
-
-
 }

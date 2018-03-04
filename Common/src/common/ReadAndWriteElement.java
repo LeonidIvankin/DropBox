@@ -23,10 +23,10 @@ public class ReadAndWriteElement {
 			HashMap<String, Object> data = (HashMap<String, Object>) body[2];
 			filePath.mkdir();
 			for (String dirName : dirs) {
-				new File(WorkWithString.concatenation(filePath.toString(), dirName)).mkdir();
+				new File(WorkWithString.concatenationPath(filePath.toString(), dirName)).mkdir();
 			}
 			for (Map.Entry entry : data.entrySet()) {
-				writeFile((byte[]) entry.getValue(), new File(WorkWithString.concatenation(filePath.toString(), entry.getKey().toString())));
+				writeFile((byte[]) entry.getValue(), new File(WorkWithString.concatenationPath(filePath.toString(), entry.getKey().toString())));
 			}
 		}
 	}
@@ -79,13 +79,13 @@ public class ReadAndWriteElement {
 	}
 
 	public void readDirToArrayList(File filePath) {
-		String dirName = WorkWithString.findReletivePath(filePathRoot.toString(), filePath.toString());
+		String dirName = WorkWithString.findRelativePath(filePathRoot.toString(), filePath.toString());
 		arrayList.add(dirName);
 	}
 
 	public void readFileToHashMap(File filePath) {
 		String fileName;
-		fileName = WorkWithString.findReletivePath(filePathRoot.toString(), filePath.toString());
+		fileName = WorkWithString.findRelativePath(filePathRoot.toString(), filePath.toString());
 		hashMap.put(fileName, readFile(filePath));
 	}
 

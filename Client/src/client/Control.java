@@ -19,7 +19,6 @@ import java.util.List;
 
 class Control {
 	private Socket socket;
-	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private File pathAbsoluteElementSave;
 	private boolean isAuthorized = false;

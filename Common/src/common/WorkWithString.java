@@ -1,6 +1,8 @@
 package common;
 
 
+import java.util.Locale;
+
 public class WorkWithString {
 
 	public static String prefixBusyName(String elementName, String[] elementList) {
@@ -12,14 +14,14 @@ public class WorkWithString {
 
 			int a = 1;
 			while(true){
-				String str = fileName + "(" + a + ")" + "." + fileExtension;
+				String str = String.format(Locale.getDefault(), "%s(%d).%s", fileName, a, fileExtension);
 				if(!check(str, elementList)) return str;
 				a++;
 			}
 		}else{
 			int a = 1;
 			while(true){
-				String str = elementName + "(" + a + ")";
+				String str = String.format(Locale.getDefault(), "%s(%d)", elementName, a);
 				if(!check(str, elementList)) return str;
 				a++;
 			}
@@ -33,7 +35,7 @@ public class WorkWithString {
 		return false;
 	}
 
-	public static String concatenation(String... strs) {
+	public static String concatenationPath(String... strs) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (int i = 0; i < strs.length; i++) {
 			stringBuilder.append(strs[i]);
@@ -56,12 +58,12 @@ public class WorkWithString {
 
 	public static String withBrackets(String str) {
 		if (str.charAt(0) != Constant.OPEN_BRACKET) {
-			return Constant.OPEN_BRACKET + str + Constant.CLOSE_BRACKET;
+			return String.format(Locale.getDefault(), "%s%s%s", Constant.OPEN_BRACKET, str, Constant.CLOSE_BRACKET);
 		}
 		return str;
 	}
 
-	public static String findReletivePath(String dir, String file) {
+	public static String findRelativePath(String dir, String file) {
 		int x = dir.length();
 		return file.substring(x + 1, file.length());
 	}

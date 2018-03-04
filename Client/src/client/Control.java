@@ -36,8 +36,8 @@ class Control {
 		readAndWriteElement = new ReadAndWriteElement();
 
 		//для debug
-		String[] strings = {"leo", "1111"};
-		workWithPacket.sendPacket(Constant.SIGNIN, strings);
+//		String[] strings = {"leo", "1111"};
+//		workWithPacket.sendPacket(Constant.SIGNIN, strings);
 
 
 		listenerSignIn();

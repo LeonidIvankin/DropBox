@@ -179,6 +179,16 @@ public class ClientHandler {
 		reload(dirCurrent);
 	}
 
+	public void makeDir(String nameDir) {//создание каталога на сервере в текущей папке
+		File file = new File(WorkWithString.concatenationPath(dirCurrent, nameDir));
+		file.mkdir();
+	}
+
+	public void makeDirRoot(String nameDir){
+		File file = new File(WorkWithString.concatenationPath(Constant.SERVER_ROOT, nameDir));
+		file.mkdir();
+	}
+
 	public void rename(Object body) {//переименовать файл и каталог
 		Object[] objects = (Object[]) body;
 		String nameOld = (String) objects[0];
@@ -214,11 +224,6 @@ public class ClientHandler {
 		Object data = body[1];
 		readAndWriteElement.writeElement(data, new File(WorkWithString.concatenationPath(dirCurrent, elementName)));
 		reload(dirCurrent);
-	}
-
-	public void makeDir(String nameDir) {//создание каталога на сервере
-		File file = new File(WorkWithString.concatenationPath(dirCurrent, nameDir));
-		file.mkdir();
 	}
 
 	public void delete(Object body) {

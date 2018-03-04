@@ -44,12 +44,13 @@ public class Authorization {
 			sendMessage(Constant.ENTER_LOGIN);
 		} else {
 			if (loginIsReserved) {
+				System.out.println(">>1");
 				sendMessage(Constant.LOGIN_BUSY);
 			} else if (pass.equals("")) {
 				sendMessage(Constant.LOGIN_IS_FREE);
 			} else {
-				System.out.println(server.setLoginAndPass(login, pass));
-				clientHandler.makeDir(login);
+				server.setLoginAndPass(login, pass);
+				clientHandler.makeDirRoot(login);
 				sendMessage(Constant.YOU_HAVE_SUCCESSFULLY_REGISTERED);
 				signIn(body);
 			}

@@ -106,7 +106,7 @@ public class ClientHandler {
 		return login;
 	}
 
-	public String[] getListFiles(String path) {//получение списка файлов на сервере. Сортировка каталогов и файлов
+	public String[] getListSortedElements(String path) {//получение списка файлов на сервере. Сортировка каталогов и файлов
 		File folder = new File(path);
 		ArrayList<String> arrayList = new ArrayList<>();
 		if (!dirCurrent.equals(dirRootClient)) {
@@ -122,6 +122,18 @@ public class ClientHandler {
 		}
 
 		return arrayList.toArray(new String[arrayList.size()]);
+	}
+
+	public String[] getListElements(String path){
+		File folder = new File(path);
+		return folder.list();
+	}
+
+	public boolean isFreeName(String name){
+		for (String nameInList : getListElements(dirCurrent)) {
+			if(name.equals(nameInList)) return false;
+		}
+		return true;
 	}
 
 	public void sendMessage(String msg) {//послать текстовое сообщение
@@ -140,12 +152,15 @@ public class ClientHandler {
 
 	public void createNewFile(Object body) {//создать новый файл
 		String newFileName = (String) body;
+		if(!isFreeName(newFileName)) {
+			newFileName = WorkWithString.prefixBusyName(newFileName, getListElements(dirCurrent));//если имя не свободно добавляем (1)
+			sendMessage("Добавлен файл: " + newFileName);
+		}
 		File newFile = new File(WorkWithString.concatenation(dirCurrent, newFileName));
 		try {
 			boolean created = newFile.createNewFile();
 			if (created) {
 				reload(dirCurrent);
-				//sendMessage("Создан новый файл " + newFileName);
 			}
 		} catch (IOException ex) {
 			System.out.println(ex.getMessage());
@@ -154,6 +169,10 @@ public class ClientHandler {
 
 	public void createNewDir(Object body) {
 		String dirName = (String) body;
+		if(!isFreeName(dirName)){
+			dirName = WorkWithString.prefixBusyName(dirName, getListElements(dirCurrent));//если имя не свободно добавляем (1)
+			sendMessage("Добавлен каталог: " + dirName);
+		}
 		makeDir(dirName);
 		reload(dirCurrent);
 	}
@@ -162,9 +181,12 @@ public class ClientHandler {
 		Object[] objects = (Object[]) body;
 		String nameOld = (String) objects[0];
 		String nameNew = (String) objects[1];
+		if(!isFreeName(nameNew)){
+			nameNew = WorkWithString.prefixBusyName(nameNew, getListElements(dirCurrent));//если имя не свободно добавляем (1)
+			sendMessage("Новое имя: " + nameNew);
+		}
 
 		File fileOld = new File(WorkWithString.concatenation(dirCurrent, nameOld));
-		System.out.println(fileOld);
 		File fileNew = new File(WorkWithString.concatenation(dirCurrent, nameNew));
 		fileOld.renameTo(fileNew);
 		reload(dirCurrent);
@@ -180,8 +202,12 @@ public class ClientHandler {
 	public void uploadFile(Object object) {//загрузить файл на сервер
 		Object[] body = (Object[]) object;
 		String elementName = (String) body[0];
+
+		if(!isFreeName(elementName)){
+			elementName = WorkWithString.prefixBusyName(elementName, getListElements(dirCurrent));//если имя не свободно добавляем (1)
+			sendMessage("Имя изменено на: " + elementName);
+		}
 		Object data = body[1];
-		//readAndWriteElement.writeElement(data, new File(dirCurrent + "\\" + elementName));
 		readAndWriteElement.writeElement(data, new File(WorkWithString.concatenation(dirCurrent, elementName)));
 		reload(dirCurrent);
 	}
@@ -211,7 +237,7 @@ public class ClientHandler {
 	}
 
 	public void reload(String path) {
-		String[] files = getListFiles(path);
+		String[] files = getListSortedElements(path);
 		workWithPacket.sendPacket(Constant.FILE_LIST, files);
 	}
 
@@ -233,10 +259,12 @@ public class ClientHandler {
 
 		dirRootClient = WorkWithString.concatenation(Constant.SERVER_ROOT, login);
 		dirCurrent = dirRootClient;
-		String[] files = getListFiles(dirCurrent);
+		String[] files = getListSortedElements(dirCurrent);
 		if (files.length != 0) {
 			reload(dirCurrent);
 		} else sendMessage(login + ", ваша папка пока пуста");
 	}
+
+
 
 }

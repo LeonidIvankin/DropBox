@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 
 class Control {
@@ -150,15 +151,15 @@ class Control {
 		client.jbDownload.addActionListener(e -> {
 			Object elementSelected;
 			if ((elementSelected = client.list.getSelectedValue()) != null) {//выделенный элемент в листе
-				String elementSelectedString = elementSelected.toString();//наименование файла по умолчанию leonid.txt [galina]
-				elementSelectedString = WorkWithString.withoutBrackets(elementSelectedString);//наименование файла по умолчанию leonid.txt galina
+				String elementSelectedString = elementSelected.toString();//наименование файла по умолчанию
+				elementSelectedString = WorkWithString.withoutBrackets(elementSelectedString);//наименование файла по умолчанию
 				File defaultPath = new File(Constant.DEFAULT_DOWNLOAD_DIR);//путь по умолчанию
 				JFileChooser jFileChooser = new JFileChooser(defaultPath);
 				jFileChooser.setSelectedFile(new File(elementSelectedString));
 				jFileChooser.setDialogTitle("Save a File");
 				int result = jFileChooser.showSaveDialog(null);
 				if (result == JFileChooser.APPROVE_OPTION) {
-					pathAbsoluteElementSave = jFileChooser.getSelectedFile();//куда сохранять D:\Downloads\leonid.txt D:\Downloads\galina
+					pathAbsoluteElementSave = jFileChooser.getSelectedFile();//куда сохранять
 					workWithPacket.sendPacket(Constant.DOWNLOAD, elementSelectedString);//какой файл выбрали в списке
 				}
 			}
@@ -174,8 +175,7 @@ class Control {
 			jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 			int result = jFileChooser.showOpenDialog(null);
 			if (result == JFileChooser.APPROVE_OPTION) {
-				File selectedFile = jFileChooser.getSelectedFile();//выделенный файл d:\Downloads\leonid.txt	d:\Downloads\galina
-				//Object body = readAndWriteElement.readElement(selectedFile);
+				File selectedFile = jFileChooser.getSelectedFile();//выделенный файл
 				Object object = readAndWriteElement.readElement(selectedFile);
 				Object[] body = {selectedFile.getName(), object};
 
@@ -185,9 +185,7 @@ class Control {
 	}
 
 	public void listenerReload() {//обновить список файлов
-		client.jbReload.addActionListener(e -> {
-			workWithPacket.sendPacket(Constant.RELOAD, null);
-		});
+		client.jbReload.addActionListener(e -> workWithPacket.sendPacket(Constant.RELOAD, null));
 	}
 
 	public void listenerSignIn() {//авторизоваться
@@ -212,14 +210,18 @@ class Control {
 
 	private void listenerDelete() {//удаление файла
 		client.jbDelete.addActionListener(e -> {
-			if (client.list.getSelectedValue() != null) {
+			List elementSelectedList;
+			if ((elementSelectedList = client.list.getSelectedValuesList()) != null) {
 				int result = JOptionPane.showConfirmDialog(client,
 						"Вы уверены",
 						"Окно подтверждения",
 						JOptionPane.YES_NO_CANCEL_OPTION,
 						JOptionPane.WARNING_MESSAGE);
 				if (result == 0) {
-					workWithPacket.sendPacket(Constant.DELETE, client.list.getSelectedValue().toString());
+					for (Object elementSelected  : elementSelectedList) {
+						workWithPacket.sendPacket(Constant.DELETE, elementSelected.toString());
+					}
+
 				}
 			}
 		});

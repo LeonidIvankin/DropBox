@@ -77,6 +77,7 @@ public class Server {
 
 	public void exit(ClientHandler clientHandler) {
 		clients.remove(clientHandler);
+		System.out.println("Клиент отключился");
 	}
 }
 
